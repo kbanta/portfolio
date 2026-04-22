@@ -1,1 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>King Banta – Web Developer</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', sans-serif; background: #030712; color: #e2e8f0; overflow-x: hidden; }
 
+  /* NAV */
+  .navbar { background: rgba(3,7,18,0.8); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(255,255,255,0.06); padding: 14px 0; }
+  .nav-logo { font-weight: 800; font-size: 1.1rem; background: linear-gradient(135deg,#818cf8,#38bdf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .nav-links a { color: #94a3b8; text-decoration: none; font-size: .875rem; font-weight: 500; margin-left: 28px; transition: .2s; }
+  .nav-links a:hover { color: #e2e8f0; }
+
+  /* HERO */
+  .hero { min-height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 120px 20px 60px; position: relative; }
+  .hero::before { content: ''; position: absolute; top: -100px; left: 50%; transform: translateX(-50%); width: 700px; height: 700px; background: radial-gradient(circle, rgba(99,102,241,0.12) 0%, transparent 70%); pointer-events: none; }
+  .role-pill { display: inline-block; background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.25); color: #818cf8; font-size: .72rem; font-weight: 700; padding: 5px 14px; border-radius: 20px; margin-bottom: 20px; letter-spacing: 1px; text-transform: uppercase; }
+  .hero h1 { font-size: clamp(2.2rem,5vw,3.8rem); font-weight: 800; line-height: 1.1; letter-spacing: -1px; }
+  .gradient { background: linear-gradient(135deg,#818cf8,#38bdf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .hero-sub { color: #64748b; font-size: 1.05rem; max-width: 520px; margin: 16px auto 0; line-height: 1.7; }
+  .hero-btns { margin-top: 32px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .btn-glow { background: linear-gradient(135deg,#6366f1,#38bdf8); border: none; color: #fff; padding: 12px 28px; border-radius: 10px; font-weight: 600; font-size: .9rem; text-decoration: none; transition: .2s; }
+  .btn-glow:hover { opacity: .85; transform: translateY(-1px); color: #fff; }
+  .btn-soft { background: transparent; border: 1px solid rgba(255,255,255,0.12); color: #e2e8f0; padding: 12px 28px; border-radius: 10px; font-weight: 600; font-size: .9rem; text-decoration: none; transition: .2s; }
+  .btn-soft:hover { background: rgba(255,255,255,0.05); color: #fff; }
+
+  /* SECTIONS */
+  section { padding: 90px 0; }
+  .section-label { font-size: .7rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #6366f1; margin-bottom: 8px; }
+  .section-title { font-size: clamp(1.6rem,3vw,2.2rem); font-weight: 800; color: #f1f5f9; letter-spacing: -.5px; }
+  .section-divider { width: 40px; height: 3px; background: linear-gradient(90deg,#6366f1,#38bdf8); border-radius: 3px; margin: 14px auto 48px; }
+
+  /* SKILLS */
+  .skills-section { background: #050d1a; }
+  .skill-chip { display: inline-block; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); color: #94a3b8; font-size: .8rem; font-weight: 500; padding: 7px 14px; border-radius: 8px; margin: 5px; transition: .2s; }
+  .skill-chip:hover { background: rgba(99,102,241,0.1); border-color: rgba(99,102,241,0.3); color: #818cf8; }
+
+  /* PROJECTS */
+  .projects-section { background: #030712; }
+  .project-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+  .project-card { background: #0b1120; border: 1px solid rgba(255,255,255,0.07); border-radius: 16px; overflow: hidden; transition: .3s; display: flex; flex-direction: column; }
+  .project-card:hover { transform: translateY(-6px); border-color: rgba(99,102,241,0.3); box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+  .project-thumb img { width: 100%; height: 170px; object-fit: cover; display: block; }
+  .project-thumb-placeholder { width: 100%; height: 170px; display: flex; align-items: center; justify-content: center; font-size: 3rem; }
+  .project-body { padding: 18px 20px; flex: 1; display: flex; flex-direction: column; }
+  .project-title { font-size: 1rem; font-weight: 700; color: #f1f5f9; margin-bottom: 8px; }
+  .project-desc { font-size: .83rem; color: #64748b; line-height: 1.6; flex: 1; }
+  .tech-tags { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 5px; }
+  .tech-tag { background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.2); color: #818cf8; font-size: .7rem; font-weight: 600; padding: 3px 9px; border-radius: 6px; }
+  .project-links { margin-top: 14px; display: flex; gap: 8px; flex-wrap: wrap; }
+  .project-links a { font-size: .75rem; font-weight: 600; color: #818cf8; text-decoration: none; padding: 4px 10px; border: 1px solid rgba(99,102,241,0.25); border-radius: 6px; transition: .2s; }
+  .project-links a:hover { background: rgba(99,102,241,0.1); }
+
+  /* DEMO BADGE */
+  .demo-badge { display: inline-flex; align-items: center; gap: 5px; background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.25); color: #34d399; font-size: .65rem; font-weight: 700; padding: 3px 8px; border-radius: 6px; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 8px; }
+  .demo-badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #34d399; display: inline-block; animation: blink 1.5s infinite; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+  /* LOCALHOST DIVIDER */
+  .localhost-divider { display: flex; align-items: center; gap: 16px; margin: 56px 0 40px; }
+  .localhost-divider-line { flex: 1; height: 1px; background: linear-gradient(90deg, transparent, rgba(16,185,129,0.3), transparent); }
+  .localhost-divider-label { display: flex; align-items: center; gap: 8px; background: rgba(16,185,129,0.07); border: 1px solid rgba(16,185,129,0.22); color: #34d399; font-size: .72rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; padding: 7px 20px; border-radius: 20px; white-space: nowrap; }
+  .localhost-dot { width: 6px; height: 6px; border-radius: 50%; background: #34d399; animation: blink 1.5s infinite; }
+
+  /* Localhost cards — subtle green accent */
+  #localhostGrid .project-card { border-color: rgba(16,185,129,0.1); }
+  #localhostGrid .project-card:hover { border-color: rgba(16,185,129,0.35); box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 30px rgba(16,185,129,0.05); }
+
+  /* ABOUT */
+  .about-section { background: #050d1a; }
+  .about-card { background: #0b1120; border: 1px solid rgba(255,255,255,0.07); border-radius: 20px; padding: 48px; text-align: center; max-width: 680px; margin: auto; }
+  .about-desc { color: #94a3b8; line-height: 1.85; font-size: .95rem; }
+
+  /* FOOTER */
+  footer { border-top: 1px solid rgba(255,255,255,0.06); padding: 48px 0 32px; text-align: center; }
+  .footer-logo { font-weight: 800; font-size: 1.3rem; background: linear-gradient(135deg,#818cf8,#38bdf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px; }
+  .footer-info { color: #475569; font-size: .85rem; line-height: 1.9; }
+  .footer-copy { color: #1e293b; font-size: .75rem; margin-top: 24px; }
+
+  /* MODAL */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 999; align-items: center; justify-content: center; }
+  .modal-overlay.open { display: flex; }
+  .modal-box { background: #0b1120; border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 36px; width: min(480px, 92vw); max-height: 90vh; overflow-y: auto; }
+  .modal-box h3 { font-size: 1.1rem; font-weight: 700; color: #f1f5f9; margin-bottom: 24px; }
+  .form-group { margin-bottom: 16px; }
+  .form-group label { display: block; font-size: .72rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 6px; }
+  .form-group input, .form-group textarea, .form-group select { width: 100%; background: #030712; border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: #e2e8f0; padding: 10px 14px; font-size: .875rem; font-family: 'Inter', sans-serif; outline: none; transition: .2s; }
+  .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: rgba(99,102,241,0.5); }
+  .form-group textarea { resize: vertical; min-height: 80px; }
+  .modal-btns { display: flex; gap: 10px; margin-top: 24px; }
+  .btn-save { flex: 1; background: linear-gradient(135deg,#6366f1,#38bdf8); border: none; color: #fff; padding: 11px; border-radius: 10px; font-weight: 600; font-size: .875rem; cursor: pointer; }
+  .btn-save:hover { opacity: .85; }
+  .btn-cancel { flex: 1; background: transparent; border: 1px solid rgba(255,255,255,0.1); color: #94a3b8; padding: 11px; border-radius: 10px; font-weight: 600; font-size: .875rem; cursor: pointer; }
+  .btn-cancel:hover { background: rgba(255,255,255,0.05); }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+  <div class="container">
+    <span class="nav-logo">KB</span>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-end" id="navMenu">
+      <div class="nav-links">
+        <a href="#skills">Skills</a>
+        <a href="#projects">Projects</a>
+        <a href="#about">About</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="role-pill">Web Developer</div>
+    <div>
+      <img src="assets/img/kb1.png" width="120" class="mb-4">
+    </div>
+    <h1>King Emanuelle B. <span class="gradient">Banta</span></h1>
+    <p class="hero-sub">Building dynamic systems and user-friendly applications that make a difference.</p>
+    <div class="hero-btns">
+      <a href="#projects" class="btn-glow">View Projects</a>
+      <a href="assets/cv/kbanta_cv.pdf" class="btn-soft" download>Download CV</a>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section class="skills-section" id="skills">
+  <div class="container text-center">
+    <div class="section-label">What I use</div>
+    <div class="section-title">Tech Stack</div>
+    <div class="section-divider"></div>
+    <div>
+      <span class="skill-chip">Laravel</span>
+      <span class="skill-chip">CodeIgniter</span>
+      <span class="skill-chip">PHP</span>
+      <span class="skill-chip">JavaScript</span>
+      <span class="skill-chip">jQuery</span>
+      <span class="skill-chip">Ajax</span>
+      <span class="skill-chip">Blade</span>
+      <span class="skill-chip">MDB</span>
+      <span class="skill-chip">Bootstrap</span>
+      <span class="skill-chip">HTML / CSS</span>
+      <span class="skill-chip">MySQL</span>
+      <span class="skill-chip">Git</span>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section class="projects-section" id="projects">
+  <div class="container">
+
+    <div class="text-center">
+      <div class="section-label">My work</div>
+      <div class="section-title">Projects</div>
+      <div class="section-divider"></div>
+    </div>
+
+    <!-- ── LIVE / CLIENT PROJECTS ── -->
+    <div class="project-grid" id="projectGrid">
+
+      <div class="project-card">
+        <div class="project-thumb"><img src="assets/img/portfolio/acme_port.png" alt="Alliance Care Medical Equipment"></div>
+        <div class="project-body">
+          <div class="project-title">Alliance Care Medical Equipment</div>
+          <div class="project-desc">A WordPress e-commerce website for medical equipment rentals and management.</div>
+          <div class="tech-tags">
+            <span class="tech-tag">WordPress</span><span class="tech-tag">Elementor</span>
+            <span class="tech-tag">JavaScript</span><span class="tech-tag">AJAX</span><span class="tech-tag">jQuery</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-thumb"><img src="assets/img/portfolio/acmedel.png" alt="Alliance Delivery App"></div>
+        <div class="project-body">
+          <div class="project-title">Alliance Delivery App</div>
+          <div class="project-desc">A custom delivery application that handles delivery and pickup of DME rentals.</div>
+          <div class="tech-tags">
+            <span class="tech-tag">CodeIgniter</span><span class="tech-tag">MDB</span>
+            <span class="tech-tag">JavaScript</span><span class="tech-tag">AJAX</span><span class="tech-tag">jQuery</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-thumb"><img src="assets/img/portfolio/bicoltfoe.png" alt="Bicol TFOE CRM"></div>
+        <div class="project-body">
+          <div class="project-title">Bicol TFOE</div>
+          <div class="project-desc">A Customer Relationship Management (CRM) system for streamlined client and engagement tracking.</div>
+          <div class="tech-tags">
+            <span class="tech-tag">CodeIgniter</span><span class="tech-tag">MDB</span>
+            <span class="tech-tag">JavaScript</span><span class="tech-tag">AJAX</span><span class="tech-tag">jQuery</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-thumb"><img src="assets/img/portfolio/acb.png" alt="ASEAN Centre for Biodiversity ERP"></div>
+        <div class="project-body">
+          <div class="project-title">ASEAN Centre for Biodiversity</div>
+          <div class="project-desc">An ERP system integrating planning, purchasing, inventory, finance, and human resources.</div>
+          <div class="tech-tags">
+            <span class="tech-tag">CodeIgniter</span><span class="tech-tag">MDB</span>
+            <span class="tech-tag">JavaScript</span><span class="tech-tag">AJAX</span><span class="tech-tag">jQuery</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-thumb"><img src="assets/img/portfolio/forbes1.png" alt="FC Online Purchase Tracking System"></div>
+        <div class="project-body">
+          <div class="project-title">FC Online Purchase Tracking System</div>
+          <div class="project-desc">Enables users to track order status from placement to delivery in real time.</div>
+          <div class="tech-tags">
+            <span class="tech-tag">Laravel 8</span><span class="tech-tag">Blade</span>
+            <span class="tech-tag">JavaScript</span><span class="tech-tag">AJAX</span><span class="tech-tag">jQuery</span>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /projectGrid -->
+
+    <!-- ── LOCALHOST / DEMO DIVIDER ── -->
+    <div class="localhost-divider">
+      <div class="localhost-divider-line"></div>
+      <div class="localhost-divider-label">
+        <span class="localhost-dot"></span>
+        Localhost &amp; Demo Projects
+        <span class="localhost-dot"></span>
+      </div>
+      <div class="localhost-divider-line"></div>
+    </div>
+
+    <!-- ── LOCALHOST / DEMO PROJECTS ── -->
+    <div class="project-grid" id="localhostGrid">
+
+      <div class="project-card">
+        <div class="project-thumb-placeholder" style="background:linear-gradient(135deg,#071a2e,#0c4a6e);">🚑</div>
+        <div class="project-body">
+          <div class="project-title">Non-Emergency Transport Service</div>
+          <span class="demo-badge">Ready for Demo</span>
+          <div class="project-desc">A full-featured transport management system with three dedicated portals — Client, Admin, and Driver — for scheduling and tracking non-emergency medical transport.</div>
+          <div class="tech-tags">
+            <span class="tech-tag">Laravel 12</span><span class="tech-tag">Bootstrap</span>
+            <span class="tech-tag">Blade</span><span class="tech-tag">JavaScript</span><span class="tech-tag">MySQL</span>
+          </div>
+          <div class="project-links">
+            <a href="http://localhost/nets" target="_blank">Client ↗</a>
+            <a href="http://localhost/nets/admin" target="_blank">Admin ↗</a>
+            <a href="http://localhost/nets/driver" target="_blank">Driver ↗</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-thumb-placeholder" style="background:linear-gradient(135deg,#0a1f14,#0d4a28);">🏠</div>
+        <div class="project-body">
+          <div class="project-title">Bedspace Management System</div>
+          <span class="demo-badge">Ready for Demo</span>
+          <div class="project-desc">An admin-facing system for managing bedspace units, tenant records, billing, and occupancy tracking in a boarding or dormitory setting.</div>
+          <div class="tech-tags">
+            <span class="tech-tag">Laravel 12</span><span class="tech-tag">Bootstrap</span>
+            <span class="tech-tag">Blade</span><span class="tech-tag">JavaScript</span><span class="tech-tag">MySQL</span>
+          </div>
+          <div class="project-links">
+            <a href="http://localhost/bedspace" target="_blank">Admin Demo ↗</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-thumb-placeholder" style="background:linear-gradient(135deg,#1a0f2e,#3b1a6e);">🤝</div>
+        <div class="project-body">
+          <div class="project-title">Assisted Living Website</div>
+          <span class="demo-badge">Ready for Demo</span>
+          <div class="project-desc">A client-facing website for an assisted living facility, showcasing services, care programs, and enabling inquiries for prospective residents and families.</div>
+          <div class="tech-tags">
+            <span class="tech-tag">Laravel 12</span><span class="tech-tag">Bootstrap</span>
+            <span class="tech-tag">Blade</span><span class="tech-tag">JavaScript</span><span class="tech-tag">MySQL</span>
+          </div>
+          <div class="project-links">
+            <a href="http://localhost/assisted-living" target="_blank">Live Demo ↗</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-thumb-placeholder" style="background:linear-gradient(135deg,#2d1000,#7c3500);">🍽️</div>
+        <div class="project-body">
+          <div class="project-title">Restaurant Management System</div>
+          <span class="demo-badge">Ready for Demo</span>
+          <div class="project-desc">A comprehensive restaurant management platform covering menu management, order processing, table reservations, and sales reporting.</div>
+          <div class="tech-tags">
+            <span class="tech-tag">Laravel 12</span><span class="tech-tag">Bootstrap</span>
+            <span class="tech-tag">Blade</span><span class="tech-tag">JavaScript</span><span class="tech-tag">MySQL</span>
+          </div>
+          <div class="project-links">
+            <a href="http://localhost/restaurant" target="_blank">Live Demo ↗</a>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /localhostGrid -->
+
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about-section" id="about">
+  <div class="container text-center">
+    <div class="section-label">Who I am</div>
+    <div class="section-title">About Me</div>
+    <div class="section-divider"></div>
+    <div class="about-card">
+      <p class="about-desc">I graduated during the pandemic and am now pursuing a career in web development. I'm passionate about creating dynamic and user-friendly websites — from ERP and CRM systems to tracking platforms. I'm excited to keep learning and growing in this field!</p>
+      <div class="mt-4">
+        <a href="assets/cv/kbanta_cv.pdf" class="btn-soft" download>Download CV</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-logo">King Banta</div>
+    <div class="footer-info">P2, San Andres, Sto. Domingo, Albay<br>09361336825</div>
+    <div class="footer-copy">© 2025 King Emanuelle B. Banta · All rights reserved</div>
+  </div>
+</footer>
+
+<!-- ADD PROJECT MODAL -->
+<div class="modal-overlay" id="modal" onclick="handleOverlay(event)">
+  <div class="modal-box">
+    <h3>Add New Project</h3>
+    <div class="form-group"><label>Project Title</label><input type="text" id="pTitle" placeholder="e.g. My Awesome App"></div>
+    <div class="form-group"><label>Short Description</label><textarea id="pDesc" placeholder="What does this project do?"></textarea></div>
+    <div class="form-group"><label>Tech Stack (comma separated)</label><input type="text" id="pTech" placeholder="e.g. Laravel, Vue, MySQL"></div>
+    <div class="form-group"><label>Emoji / Icon</label><input type="text" id="pEmoji" placeholder="e.g. 🚀" maxlength="4"></div>
+    <div class="form-group">
+      <label>Background Gradient</label>
+      <select id="pGradient">
+        <option value="linear-gradient(135deg,#1e1b4b,#0c4a6e)">Indigo → Blue</option>
+        <option value="linear-gradient(135deg,#052e16,#0f4c2a)">Dark Green</option>
+        <option value="linear-gradient(135deg,#1c0533,#3b0764)">Deep Purple</option>
+        <option value="linear-gradient(135deg,#431407,#7c2d12)">Ember Red</option>
+        <option value="linear-gradient(135deg,#0c1a2e,#1a3a5c)">Navy</option>
+      </select>
+    </div>
+    <div class="form-group"><label>Live URL (optional)</label><input type="text" id="pUrl" placeholder="https://..."></div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-save" onclick="addProject()">Add Project</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  function openModal() { document.getElementById('modal').classList.add('open'); }
+  function closeModal() {
+    document.getElementById('modal').classList.remove('open');
+    ['pTitle','pDesc','pTech','pEmoji','pUrl'].forEach(id => document.getElementById(id).value = '');
+  }
+  function handleOverlay(e) { if (e.target === document.getElementById('modal')) closeModal(); }
+  function addProject() {
+    const title = document.getElementById('pTitle').value.trim();
+    const desc  = document.getElementById('pDesc').value.trim();
+    const tech  = document.getElementById('pTech').value.trim();
+    const emoji = document.getElementById('pEmoji').value.trim() || '💻';
+    const gradient = document.getElementById('pGradient').value;
+    const url   = document.getElementById('pUrl').value.trim();
+    if (!title) { alert('Please enter a project title.'); return; }
+    const tags = tech ? tech.split(',').map(t => `<span class="tech-tag">${t.trim()}</span>`).join('') : '';
+    const linkHtml = url ? `<div class="project-links"><a href="${url}" target="_blank">Live Demo ↗</a></div>` : '';
+    const card = document.createElement('div');
+    card.className = 'project-card';
+    card.innerHTML = `
+      <div class="project-thumb-placeholder" style="background:${gradient};">${emoji}</div>
+      <div class="project-body">
+        <div class="project-title">${title}</div>
+        <div class="project-desc">${desc || 'No description provided.'}</div>
+        <div class="tech-tags">${tags}</div>
+        ${linkHtml}
+      </div>`;
+    document.getElementById('projectGrid').appendChild(card);
+    closeModal();
+  }
+</script>
+</body>
+</html>
