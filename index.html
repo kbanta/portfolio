@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>King Banta – Web Developer</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ─── CSS VARIABLES ─── */
+:root[data-theme="dark"] {
+  --bg: #030712;
+  --bg2: #050d1a;
+  --bg3: #0b1120;
+  --surface: #0f172a;
+  --border: rgba(255,255,255,0.07);
+  --border-accent: rgba(99,102,241,0.3);
+  --text: #e2e8f0;
+  --text-muted: #64748b;
+  --text-soft: #94a3b8;
+  --accent: #6366f1;
+  --accent2: #38bdf8;
+  --glow: rgba(99,102,241,0.12);
+  --card-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  --nav-bg: rgba(3,7,18,0.85);
+  --pill-bg: rgba(99,102,241,0.1);
+  --pill-border: rgba(99,102,241,0.25);
+  --skill-bg: rgba(255,255,255,0.04);
+  --skill-border: rgba(255,255,255,0.08);
+  --toggle-icon: "☀️";
+}
+:root[data-theme="light"] {
+  --bg: #f8fafc;
+  --bg2: #f1f5f9;
+  --bg3: #ffffff;
+  --surface: #ffffff;
+  --border: rgba(0,0,0,0.08);
+  --border-accent: rgba(99,102,241,0.35);
+  --text: #0f172a;
+  --text-muted: #64748b;
+  --text-soft: #475569;
+  --accent: #4f46e5;
+  --accent2: #0ea5e9;
+  --glow: rgba(99,102,241,0.07);
+  --card-shadow: 0 8px 40px rgba(0,0,0,0.1);
+  --nav-bg: rgba(248,250,252,0.9);
+  --pill-bg: rgba(99,102,241,0.08);
+  --pill-border: rgba(99,102,241,0.2);
+  --skill-bg: rgba(0,0,0,0.03);
+  --skill-border: rgba(0,0,0,0.08);
+  --toggle-icon: "🌙";
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+  transition: background 0.35s ease, color 0.35s ease;
+}
+
+/* ─── ANIMATIONS ─── */
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(28px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity:0; }
+  to   { opacity:1; }
+}
+@keyframes float {
+  0%,100% { transform:translateY(0px); }
+  50%     { transform:translateY(-10px); }
+}
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+@keyframes blink {
+  0%,100% { opacity:1; }
+  50%     { opacity:.3; }
+}
+@keyframes spin {
+  from { transform:rotate(0deg); }
+  to   { transform:rotate(360deg); }
+}
+@keyframes slideIn {
+  from { opacity:0; transform:translateX(-20px); }
+  to   { opacity:1; transform:translateX(0); }
+}
+
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.65s cubic-bezier(.22,1,.36,1), transform 0.65s cubic-bezier(.22,1,.36,1);
+}
+.animate-on-scroll.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.delay-1 { transition-delay:.1s; }
+.delay-2 { transition-delay:.2s; }
+.delay-3 { transition-delay:.3s; }
+.delay-4 { transition-delay:.4s; }
+
+/* ─── NAV ─── */
+.navbar {
+  position: fixed; top:0; left:0; right:0; z-index:100;
+  background: var(--nav-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 0;
+  transition: background 0.35s ease, border-color 0.35s ease;
+}
+.nav-inner {
+  max-width: 1100px; margin:auto;
+  padding: 0 24px;
+  display: flex; align-items:center; justify-content:space-between;
+}
+.nav-logo {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800; font-size:1.15rem;
+  background: linear-gradient(135deg,var(--accent),var(--accent2));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  background-clip:text;
+  letter-spacing:-.5px;
+}
+.nav-right { display:flex; align-items:center; gap:6px; }
+.nav-links { display:flex; gap:4px; }
+.nav-links a {
+  color: var(--text-soft); text-decoration:none;
+  font-size:.85rem; font-weight:500;
+  padding:6px 14px; border-radius:8px;
+  transition:.2s;
+}
+.nav-links a:hover { color:var(--text); background:var(--skill-bg); }
+
+/* Theme toggle */
+.theme-toggle {
+  background: var(--skill-bg);
+  border: 1px solid var(--skill-border);
+  border-radius:10px;
+  width:40px; height:36px;
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer;
+  font-size:1rem;
+  transition:.2s;
+  margin-left:8px;
+}
+.theme-toggle:hover { background:var(--pill-bg); border-color:var(--pill-border); }
+
+/* ─── HERO ─── */
+.hero {
+  min-height:100vh;
+  display:flex; align-items:center; justify-content:center;
+  text-align:center;
+  padding:120px 24px 60px;
+  position:relative; overflow:hidden;
+}
+.hero-blob {
+  position:absolute; top:-80px; left:50%;
+  transform:translateX(-50%);
+  width:800px; height:800px;
+  background: radial-gradient(circle, var(--glow) 0%, transparent 65%);
+  pointer-events:none;
+  animation: float 8s ease-in-out infinite;
+}
+.hero-blob2 {
+  position:absolute; bottom:-100px; left:10%;
+  width:400px; height:400px;
+  background: radial-gradient(circle, rgba(56,189,248,0.06) 0%, transparent 70%);
+  pointer-events:none;
+  animation: float 10s ease-in-out infinite reverse;
+}
+.hero-content { position:relative; z-index:1; animation: fadeUp 0.9s cubic-bezier(.22,1,.36,1) both; }
+
+.role-pill {
+  display:inline-block;
+  background:var(--pill-bg);
+  border:1px solid var(--pill-border);
+  color:var(--accent);
+  font-size:.7rem; font-weight:700;
+  padding:5px 16px; border-radius:20px;
+  margin-bottom:20px;
+  letter-spacing:1.5px; text-transform:uppercase;
+}
+.avatar-wrap {
+  width:110px; height:110px; border-radius:50%;
+  margin:0 auto 24px;
+  background: linear-gradient(135deg,var(--accent),var(--accent2));
+  padding:3px;
+  animation: float 6s ease-in-out infinite;
+}
+.avatar-wrap img {
+  width:100%; height:100%;
+  border-radius:50%; object-fit:cover;
+  background: var(--bg3);
+}
+.hero h1 {
+  font-family:'Syne', sans-serif;
+  font-size: clamp(2.4rem,5.5vw,4rem);
+  font-weight:800; line-height:1.08;
+  letter-spacing:-1.5px;
+  animation: fadeUp .9s .1s cubic-bezier(.22,1,.36,1) both;
+}
+.gradient {
+  background: linear-gradient(135deg,var(--accent),var(--accent2));
+  background-size:200% auto;
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  background-clip:text;
+  animation: shimmer 4s linear infinite;
+}
+.hero-sub {
+  color:var(--text-muted);
+  font-size:1.05rem; max-width:500px;
+  margin:18px auto 0; line-height:1.75;
+  animation: fadeUp .9s .2s cubic-bezier(.22,1,.36,1) both;
+}
+.hero-btns {
+  margin-top:34px;
+  display:flex; gap:12px; justify-content:center; flex-wrap:wrap;
+  animation: fadeUp .9s .3s cubic-bezier(.22,1,.36,1) both;
+}
+.btn-glow {
+  background: linear-gradient(135deg,var(--accent),var(--accent2));
+  border:none; color:#fff;
+  padding:12px 28px; border-radius:10px;
+  font-weight:600; font-size:.9rem;
+  text-decoration:none;
+  transition:.25s; cursor:pointer;
+  box-shadow: 0 4px 24px rgba(99,102,241,0.25);
+}
+.btn-glow:hover { opacity:.88; transform:translateY(-2px); box-shadow: 0 8px 32px rgba(99,102,241,0.35); color:#fff; }
+.btn-soft {
+  background:transparent;
+  border:1.5px solid var(--border);
+  color:var(--text);
+  padding:12px 28px; border-radius:10px;
+  font-weight:600; font-size:.9rem;
+  text-decoration:none; transition:.25s; cursor:pointer;
+}
+.btn-soft:hover { background:var(--skill-bg); border-color:var(--skill-border); color:var(--text); transform:translateY(-2px); }
+
+/* Scroll indicator */
+.scroll-hint {
+  position:absolute; bottom:36px; left:50%; transform:translateX(-50%);
+  display:flex; flex-direction:column; align-items:center; gap:6px;
+  color:var(--text-muted); font-size:.7rem; font-weight:500; letter-spacing:1px;
+  animation: fadeIn 1.5s 1s both;
+}
+.scroll-hint-dot {
+  width:24px; height:38px;
+  border:2px solid var(--border);
+  border-radius:12px;
+  display:flex; align-items:flex-start; justify-content:center;
+  padding-top:5px;
+}
+.scroll-hint-dot::after {
+  content:'';
+  width:4px; height:8px;
+  border-radius:2px;
+  background:var(--accent);
+  animation: float 1.8s ease-in-out infinite;
+}
+
+/* ─── SECTIONS ─── */
+section { padding:96px 0; }
+.container { max-width:1100px; margin:auto; padding:0 24px; }
+.section-label {
+  font-size:.68rem; font-weight:700; letter-spacing:2.5px;
+  text-transform:uppercase; color:var(--accent); margin-bottom:8px;
+}
+.section-title {
+  font-family:'Syne', sans-serif;
+  font-size:clamp(1.8rem,3vw,2.4rem);
+  font-weight:800; color:var(--text);
+  letter-spacing:-1px;
+}
+.section-divider {
+  width:40px; height:3px;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  border-radius:3px; margin:14px auto 54px;
+}
+
+/* ─── SKILLS ─── */
+.skills-section { background:var(--bg2); }
+
+.skills-grid {
+  display:flex; flex-wrap:wrap;
+  gap:10px; justify-content:center;
+}
+.skill-chip {
+  display:inline-flex; align-items:center; gap:8px;
+  background:var(--skill-bg);
+  border:1px solid var(--skill-border);
+  color:var(--text-soft);
+  font-size:.82rem; font-weight:500;
+  padding:8px 16px; border-radius:10px;
+  transition:.25s; cursor:default;
+}
+.skill-chip:hover {
+  background:var(--pill-bg);
+  border-color:var(--pill-border);
+  color:var(--accent);
+  transform:translateY(-3px);
+  box-shadow: 0 6px 20px rgba(99,102,241,0.15);
+}
+.skill-chip img {
+  width:18px; height:18px; object-fit:contain;
+  border-radius:3px;
+}
+
+/* ─── PROJECTS ─── */
+.projects-section { background:var(--bg); }
+.project-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(310px,1fr));
+  gap:20px;
+}
+.project-card {
+  background:var(--bg3);
+  border:1px solid var(--border);
+  border-radius:18px; overflow:hidden;
+  transition: transform .3s cubic-bezier(.22,1,.36,1), box-shadow .3s, border-color .3s;
+  display:flex; flex-direction:column;
+}
+.project-card:hover {
+  transform:translateY(-8px);
+  border-color:var(--border-accent);
+  box-shadow:var(--card-shadow);
+}
+.project-thumb img {
+  width:100%; height:180px;
+  object-fit:cover; display:block;
+}
+.project-thumb-placeholder {
+  width:100%; height:180px;
+  display:flex; align-items:center;
+  justify-content:center; font-size:3.2rem;
+}
+.project-body {
+  padding:20px 22px; flex:1;
+  display:flex; flex-direction:column;
+}
+.project-title {
+  font-family:'Syne', sans-serif;
+  font-size:1rem; font-weight:700;
+  color:var(--text); margin-bottom:8px;
+}
+.project-desc {
+  font-size:.83rem; color:var(--text-muted);
+  line-height:1.65; flex:1;
+}
+.tech-tags { margin-top:14px; display:flex; flex-wrap:wrap; gap:5px; }
+.tech-tag {
+  background:var(--pill-bg);
+  border:1px solid var(--pill-border);
+  color:var(--accent);
+  font-size:.68rem; font-weight:600;
+  padding:3px 9px; border-radius:6px;
+}
+.project-links { margin-top:14px; display:flex; gap:8px; flex-wrap:wrap; }
+.project-links a {
+  font-size:.75rem; font-weight:600;
+  color:var(--accent); text-decoration:none;
+  padding:4px 12px;
+  border:1px solid var(--pill-border);
+  border-radius:6px; transition:.2s;
+}
+.project-links a:hover { background:var(--pill-bg); }
+
+.demo-badge {
+  display:inline-flex; align-items:center; gap:5px;
+  background:rgba(16,185,129,0.1);
+  border:1px solid rgba(16,185,129,0.25);
+  color:#34d399;
+  font-size:.64rem; font-weight:700;
+  padding:3px 8px; border-radius:6px;
+  text-transform:uppercase; letter-spacing:.5px;
+  margin-bottom:8px;
+}
+.demo-badge::before {
+  content:''; width:5px; height:5px;
+  border-radius:50%; background:#34d399;
+  animation: blink 1.5s infinite;
+  display:inline-block;
+}
+
+.localhost-divider {
+  display:flex; align-items:center; gap:16px;
+  margin:64px 0 44px;
+}
+.localhost-divider-line {
+  flex:1; height:1px;
+  background:linear-gradient(90deg,transparent,rgba(16,185,129,0.3),transparent);
+}
+.localhost-divider-label {
+  display:flex; align-items:center; gap:8px;
+  background:rgba(16,185,129,0.07);
+  border:1px solid rgba(16,185,129,0.22);
+  color:#34d399;
+  font-size:.7rem; font-weight:700;
+  letter-spacing:1.5px; text-transform:uppercase;
+  padding:7px 20px; border-radius:20px; white-space:nowrap;
+}
+.localhost-dot {
+  width:5px; height:5px; border-radius:50%;
+  background:#34d399; animation: blink 1.5s infinite;
+}
+#localhostGrid .project-card { border-color:rgba(16,185,129,0.1); }
+#localhostGrid .project-card:hover {
+  border-color:rgba(16,185,129,0.35);
+  box-shadow:0 20px 60px rgba(0,0,0,0.3), 0 0 30px rgba(16,185,129,0.06);
+}
+
+/* ─── ABOUT ─── */
+.about-section { background:var(--bg2); }
+.about-card {
+  background:var(--bg3);
+  border:1px solid var(--border);
+  border-radius:22px; padding:52px;
+  text-align:center; max-width:700px; margin:auto;
+  transition: background .35s, border-color .35s;
+}
+.about-desc {
+  color:var(--text-soft);
+  line-height:1.9; font-size:.97rem;
+}
+
+/* ─── FOOTER ─── */
+footer {
+  border-top:1px solid var(--border);
+  padding:52px 0 36px;
+  text-align:center;
+  background:var(--bg);
+}
+.footer-logo {
+  font-family:'Syne', sans-serif;
+  font-weight:800; font-size:1.4rem;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  background-clip:text; margin-bottom:10px;
+}
+.footer-info { color:var(--text-muted); font-size:.85rem; line-height:2; }
+.footer-copy { color:var(--border-accent); font-size:.72rem; margin-top:24px; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="navbar">
+  <div class="nav-inner">
+    <span class="nav-logo">KB.</span>
+    <div class="nav-right">
+      <div class="nav-links">
+        <a href="#skills">Skills</a>
+        <a href="#projects">Projects</a>
+        <a href="#about">About</a>
+      </div>
+      <button class="theme-toggle" id="themeToggle" title="Toggle theme">☀️</button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-blob"></div>
+  <div class="hero-blob2"></div>
+  <div class="hero-content">
+    <div class="role-pill">✦ Web Developer</div>
+    <div class="avatar-wrap">
+      <img src="assets/img/kb1.png" alt="King Banta" onerror="this.style.display='none';this.parentElement.innerHTML='<div style=\'width:100%;height:100%;border-radius:50%;background:linear-gradient(135deg,#6366f1,#38bdf8);display:flex;align-items:center;justify-content:center;font-size:2.2rem;font-family:Syne,sans-serif;font-weight:800;color:white;\'>KB</div>'">
+    </div>
+    <h1>King Emanuelle B.<br><span class="gradient">Banta</span></h1>
+    <p class="hero-sub">Building dynamic systems and user-friendly applications that make a real difference.</p>
+    <div class="hero-btns">
+      <a href="#projects" class="btn-glow">View Projects</a>
+      <a href="assets/cv/cvkb.pdf" class="btn-soft" download>Download CV</a>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <div class="scroll-hint-dot"></div>
+    <span>SCROLL</span>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section class="skills-section" id="skills">
+  <div class="container text-center" style="text-align:center;">
+    <div class="section-label animate-on-scroll">What I use</div>
+    <div class="section-title animate-on-scroll delay-1">Tech Stack</div>
+    <div class="section-divider"></div>
+    <div class="skills-grid animate-on-scroll delay-2">
+
+      <!-- PHP ecosystem -->
+      <span class="skill-chip">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/laravel/laravel-original.svg" alt="Laravel">
+        Laravel
+      </span>
+      <span class="skill-chip">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/codeigniter/codeigniter-plain.svg" alt="CodeIgniter">
+        CodeIgniter
+      </span>
+      <span class="skill-chip">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg" alt="PHP">
+        PHP
+      </span>
+
+      <!-- JS -->
+      <span class="skill-chip">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JS">
+        JavaScript
+      </span>
+      <span class="skill-chip">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/jquery/jquery-original.svg" alt="jQuery">
+        jQuery
+      </span>
+      <span class="skill-chip">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/ajax/ajax-original.svg" alt="Ajax" onerror="this.src='https://www.svgrepo.com/show/369457/ajax.svg'">
+        Ajax
+      </span>
+
+      <!-- Templates / CSS -->
+      <span class="skill-chip">
+        <img src="https://laravel.com/img/logomark.min.svg" alt="Blade" style="filter:hue-rotate(160deg);">
+        Blade
+      </span>
+      <span class="skill-chip">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-original.svg" alt="Bootstrap">
+        Bootstrap
+      </span>
+      <span class="skill-chip">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg" alt="Tailwind">
+        Tailwind CSS
+      </span>
+
+      <!-- CMS / page builders -->
+      <span class="skill-chip">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/wordpress/wordpress-original.svg" alt="WordPress">
+        WordPress
+      </span>
+      <span class="skill-chip">
+        <!-- Elementor wordmark from their CDN -->
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Elementor-Logo.svg/512px-Elementor-Logo.svg.png" alt="Elementor" style="height:18px;width:auto;border-radius:0;">
+        Elementor
+      </span>
+
+      <!-- Web -->
+      <span class="skill-chip">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML5">
+        HTML / CSS
+      </span>
+
+      <!-- DB / tools -->
+      <span class="skill-chip">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" alt="MySQL">
+        MySQL
+      </span>
+      <span class="skill-chip">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" alt="Git">
+        Git
+      </span>
+
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section class="projects-section" id="projects">
+  <div class="container">
+    <div class="text-center" style="text-align:center;">
+      <div class="section-label animate-on-scroll">My work</div>
+      <div class="section-title animate-on-scroll delay-1">Projects</div>
+      <div class="section-divider"></div>
+    </div>
+
+    <!-- LIVE / CLIENT -->
+    <div class="project-grid" id="projectGrid">
+
+      <div class="project-card animate-on-scroll">
+        <div class="project-thumb"><img src="assets/img/portfolio/acme_port.png" alt="ACME" onerror="this.parentElement.innerHTML='<div class=\'project-thumb-placeholder\' style=\'background:linear-gradient(135deg,#1e1b4b,#0c4a6e);\'>🏥</div>'"></div>
+        <div class="project-body">
+          <div class="project-title">Alliance Care Medical Equipment</div>
+          <div class="project-desc">A WordPress e-commerce website for medical equipment rentals and management.</div>
+          <div class="tech-tags">
+            <span class="tech-tag">WordPress</span><span class="tech-tag">Elementor</span>
+            <span class="tech-tag">JavaScript</span><span class="tech-tag">AJAX</span><span class="tech-tag">jQuery</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card animate-on-scroll delay-1">
+        <div class="project-thumb"><img src="assets/img/portfolio/acmedel.png" alt="Alliance Delivery" onerror="this.parentElement.innerHTML='<div class=\'project-thumb-placeholder\' style=\'background:linear-gradient(135deg,#1a0f2e,#3b1a6e);\'>🚚</div>'"></div>
+        <div class="project-body">
+          <div class="project-title">Alliance Delivery App</div>
+          <div class="project-desc">A custom delivery application for handling DME rental pickup and delivery logistics.</div>
+          <div class="tech-tags">
+            <span class="tech-tag">CodeIgniter</span><span class="tech-tag">MDB</span>
+            <span class="tech-tag">JavaScript</span><span class="tech-tag">AJAX</span><span class="tech-tag">jQuery</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card animate-on-scroll delay-2">
+        <div class="project-thumb"><img src="assets/img/portfolio/bicoltfoe.png" alt="Bicol TFOE" onerror="this.parentElement.innerHTML='<div class=\'project-thumb-placeholder\' style=\'background:linear-gradient(135deg,#052e16,#0f4c2a);\'>📊</div>'"></div>
+        <div class="project-body">
+          <div class="project-title">Bicol TFOE</div>
+          <div class="project-desc">A CRM system for streamlined client management and engagement tracking.</div>
+          <div class="tech-tags">
+            <span class="tech-tag">CodeIgniter</span><span class="tech-tag">MDB</span>
+            <span class="tech-tag">JavaScript</span><span class="tech-tag">AJAX</span><span class="tech-tag">jQuery</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card animate-on-scroll delay-3">
+        <div class="project-thumb"><img src="assets/img/portfolio/acb.png" alt="ACB" onerror="this.parentElement.innerHTML='<div class=\'project-thumb-placeholder\' style=\'background:linear-gradient(135deg,#0a1f14,#0d4a28);\'>🌿</div>'"></div>
+        <div class="project-body">
+          <div class="project-title">ASEAN Centre for Biodiversity</div>
+          <div class="project-desc">An ERP system integrating planning, purchasing, inventory, finance, and human resources.</div>
+          <div class="tech-tags">
+            <span class="tech-tag">CodeIgniter</span><span class="tech-tag">MDB</span>
+            <span class="tech-tag">JavaScript</span><span class="tech-tag">AJAX</span><span class="tech-tag">jQuery</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card animate-on-scroll delay-4">
+        <div class="project-thumb"><img src="assets/img/portfolio/forbes1.png" alt="FC Tracking" onerror="this.parentElement.innerHTML='<div class=\'project-thumb-placeholder\' style=\'background:linear-gradient(135deg,#1a1000,#4a3500);\'>📦</div>'"></div>
+        <div class="project-body">
+          <div class="project-title">FC Online Purchase Tracking System</div>
+          <div class="project-desc">Enables users to track order status from placement to delivery in real time.</div>
+          <div class="tech-tags">
+            <span class="tech-tag">Laravel 8</span><span class="tech-tag">Blade</span>
+            <span class="tech-tag">JavaScript</span><span class="tech-tag">AJAX</span><span class="tech-tag">jQuery</span>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /projectGrid -->
+
+    <!-- LOCALHOST DIVIDER -->
+    <div class="localhost-divider animate-on-scroll">
+      <div class="localhost-divider-line"></div>
+      <div class="localhost-divider-label">
+        <span class="localhost-dot"></span>
+        Localhost &amp; Demo Projects
+        <span class="localhost-dot"></span>
+      </div>
+      <div class="localhost-divider-line"></div>
+    </div>
+
+    <div class="project-grid" id="localhostGrid">
+
+      <div class="project-card animate-on-scroll">
+        <div class="project-thumb-placeholder" style="background:linear-gradient(135deg,#071a2e,#0c4a6e);">🚑</div>
+        <div class="project-body">
+          <div class="project-title">Non-Emergency Transport Service</div>
+          <span class="demo-badge">Ready for Demo</span>
+          <div class="project-desc">A full-featured transport management system with Client, Admin, and Driver portals for scheduling non-emergency medical transport.</div>
+          <div class="tech-tags">
+            <span class="tech-tag">Laravel 12</span><span class="tech-tag">Bootstrap</span>
+            <span class="tech-tag">Blade</span><span class="tech-tag">JavaScript</span><span class="tech-tag">MySQL</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card animate-on-scroll delay-1">
+        <div class="project-thumb-placeholder" style="background:linear-gradient(135deg,#0a1f14,#0d4a28);">🏠</div>
+        <div class="project-body">
+          <div class="project-title">Bedspace Management System</div>
+          <span class="demo-badge">Ready for Demo</span>
+          <div class="project-desc">Admin-facing system for managing bedspace units, tenant records, billing, and occupancy in dormitory settings.</div>
+          <div class="tech-tags">
+            <span class="tech-tag">Laravel 12</span><span class="tech-tag">Bootstrap</span>
+            <span class="tech-tag">Blade</span><span class="tech-tag">JavaScript</span><span class="tech-tag">MySQL</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card animate-on-scroll delay-2">
+        <div class="project-thumb-placeholder" style="background:linear-gradient(135deg,#1a0f2e,#3b1a6e);">🤝</div>
+        <div class="project-body">
+          <div class="project-title">Assisted Living Website</div>
+          <span class="demo-badge">Ready for Demo</span>
+          <div class="project-desc">Client-facing website for an assisted living facility showcasing care programs and enabling family inquiries.</div>
+          <div class="tech-tags">
+            <span class="tech-tag">Laravel 12</span><span class="tech-tag">Bootstrap</span>
+            <span class="tech-tag">Blade</span><span class="tech-tag">JavaScript</span><span class="tech-tag">MySQL</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card animate-on-scroll delay-3">
+        <div class="project-thumb-placeholder" style="background:linear-gradient(135deg,#2d1000,#7c3500);">🍽️</div>
+        <div class="project-body">
+          <div class="project-title">Restaurant Management System</div>
+          <span class="demo-badge">Ready for Demo</span>
+          <div class="project-desc">Comprehensive platform covering menu management, table reservations, and detailed sales reporting.</div>
+          <div class="tech-tags">
+            <span class="tech-tag">Laravel 12</span><span class="tech-tag">Bootstrap</span>
+            <span class="tech-tag">Blade</span><span class="tech-tag">JavaScript</span><span class="tech-tag">MySQL</span>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /localhostGrid -->
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about-section" id="about">
+  <div class="container" style="text-align:center;">
+    <div class="section-label animate-on-scroll">Who I am</div>
+    <div class="section-title animate-on-scroll delay-1">About Me</div>
+    <div class="section-divider"></div>
+    <div class="about-card animate-on-scroll delay-2">
+      <p class="about-desc">I graduated during the pandemic and am now pursuing a career in web development. I'm passionate about creating dynamic and user-friendly websites — from ERP and CRM systems to tracking platforms. I'm excited to keep learning and growing in this field!</p>
+      <div style="margin-top:28px;">
+        <a href="assets/cv/cvkb.pdf" class="btn-soft" download>Download CV</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-logo">King Banta</div>
+    <div class="footer-info">P2, San Andres, Sto. Domingo, Albay<br>09361336825</div>
+    <div class="footer-copy">© 2025 King Emanuelle B. Banta · All rights reserved</div>
+  </div>
+</footer>
+
+<script>
+/* ── THEME TOGGLE ── */
+const toggle = document.getElementById('themeToggle');
+const html   = document.documentElement;
+const saved  = localStorage.getItem('theme') || 'dark';
+html.setAttribute('data-theme', saved);
+toggle.textContent = saved === 'dark' ? '☀️' : '🌙';
+
+toggle.addEventListener('click', () => {
+  const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  html.setAttribute('data-theme', next);
+  toggle.textContent = next === 'dark' ? '☀️' : '🌙';
+  localStorage.setItem('theme', next);
+});
+
+/* ── SCROLL ANIMATIONS ── */
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12 });
+
+document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
+
+/* ── NAV ACTIVE ── */
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(sec => {
+    if (window.scrollY >= sec.offsetTop - 120) current = sec.id;
+  });
+  navLinks.forEach(a => {
+    a.style.color = a.getAttribute('href') === '#'+current
+      ? 'var(--accent)' : '';
+  });
+});
+</script>
+</body>
+</html>
