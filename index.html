@@ -370,6 +370,20 @@ footer{background:var(--ink);padding:48px 64px 28px;border-top:1px solid rgba(25
 .reveal.up{opacity:1;transform:none}
 .d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}.d4{transition-delay:.32s}
 
+/* ── FORM ── */
+.flabel{display:block;font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
+.finput{
+  width:100%;padding:13px 16px;border:1.5px solid var(--border);border-radius:10px;
+  font-family:'Cabinet Grotesk',sans-serif;font-size:.95rem;color:var(--ink);
+  background:var(--white);outline:none;transition:border-color .2s,box-shadow .2s;
+  appearance:none;
+}
+.finput:focus{border-color:var(--g1);box-shadow:0 0 0 3px rgba(0,255,135,.1)}
+.finput::placeholder{color:#b0bdb0}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.contact-layout{grid-template-columns:1fr 1fr;gap:64px}
+@media(max-width:860px){.contact-layout{grid-template-columns:1fr!important;gap:40px!important}}
+
 ::-webkit-scrollbar{width:5px}
 ::-webkit-scrollbar-track{background:#fff}
 ::-webkit-scrollbar-thumb{background:var(--g1);border-radius:3px}
@@ -416,7 +430,7 @@ footer{background:var(--ink);padding:48px 64px 28px;border-top:1px solid rgba(25
     </div>
     <div class="hero-stats">
       <div><div class="hd-num">9+</div><div class="hd-label">Projects Shipped</div></div>
-      <div><div class="hd-num">4+</div><div class="hd-label">Live Clients</div></div>
+      <div><div class="hd-num">3+</div><div class="hd-label">Experience</div></div>
       <div><div class="hd-num">Full</div><div class="hd-label">Stack Dev</div></div>
     </div>
   </div>
@@ -431,8 +445,8 @@ footer{background:var(--ink);padding:48px 64px 28px;border-top:1px solid rgba(25
     </div>
     <!-- Float cards -->
     <div class="float-card fc1">
-      <div class="fc-label">Projects Done</div>
-      <div class="fc-value">9+</div>
+      <div class="fc-label">Experience</div>
+      <div class="fc-value">3+</div>
       <div class="fc-bar"></div>
     </div>
     <div class="float-card fc2">
@@ -538,6 +552,29 @@ footer{background:var(--ink);padding:48px 64px 28px;border-top:1px solid rgba(25
       <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" alt="Git">
       <div class="sc-name">Git</div><div class="sc-cat">Version Control</div>
     </div>
+    <div class="stack-chip">
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original-wordmark.svg" alt="AWS">
+  <div class="sc-name">AWS</div>
+  <div class="sc-cat">Cloud</div>
+</div>
+
+<div class="stack-chip">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Hostinger_logo_purple.svg" alt="Hostinger">
+  <div class="sc-name">Hostinger</div>
+  <div class="sc-cat">Hosting</div>
+</div>
+
+<div class="stack-chip">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/5/5f/Google_Workspace_Logo.svg" alt="Google Workspace">
+  <div class="sc-name">Google Workspace</div>
+  <div class="sc-cat">Productivity</div>
+</div>
+
+<div class="stack-chip">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/6/68/RingCentral_logo.svg" alt="RingCentral">
+  <div class="sc-name">RingCentral</div>
+  <div class="sc-cat">VoIP & UCaaS</div>
+</div>
   </div>
 </section>
 
@@ -759,59 +796,120 @@ footer{background:var(--ink);padding:48px 64px 28px;border-top:1px solid rgba(25
   </div>
 </section>
 
-<!-- ── CONTACT CTA ── -->
+<!-- ── CONTACT ── -->
 <section id="contact" class="sec" style="background:var(--white)">
-  <div class="cta-inner reveal">
-    <div class="cta-blob"></div>
+  <div class="contact-layout reveal">
+
+    <!-- LEFT info -->
     <div>
-      <div class="cta-tag">✦ Let's Work Together</div>
-      <h2 class="cta-h2">Got a project?<br>Let's build it.</h2>
-      <p class="cta-p">Whether you need a custom web system, a business website, or help with an existing project — I'm available and ready to help.</p>
-      <div class="cta-details">
-        <div class="cta-detail">📧 <a href="mailto:kingbanta@email.com">kingbanta@email.com</a></div>
-        <div class="cta-detail">📱 <a href="tel:+639361336825">+63 9361 336 825</a></div>
-        <div class="cta-detail">📍 <span style="color:rgba(255,255,255,.35)">P2, San Andres, Sto. Domingo, Albay</span></div>
+      <div class="section-tag">Let's Work Together</div>
+      <h2 class="section-h2">Got a project?<br>Let's build it.</h2>
+      <p style="color:var(--muted);font-size:1rem;line-height:1.75;margin-top:20px">Whether you need a custom web system, a business website, or help with an existing project — fill in the form and I'll get back to you within 24 hours.</p>
+      <div style="margin-top:36px;display:flex;flex-direction:column;gap:18px">
+        <div style="display:flex;align-items:center;gap:14px">
+<!--           <div style="width:44px;height:44px;background:linear-gradient(135deg,var(--g1),var(--g3));border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">&#128231;</div>
+          <div> -->
+<!--             <div style="font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:2px">Email</div>
+            <a href="mailto:kingbantaclass@gmail.com" style="font-weight:700;font-size:.95rem;color:var(--ink);text-decoration:none" onmouseover="this.style.color='#00AA58'" onmouseout="this.style.color='var(--ink)'">kingbantaclass@gmail.com</a>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px">
+          <div style="width:44px;height:44px;background:linear-gradient(135deg,var(--g1),var(--g3));border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">&#128241;</div>
+          <div>
+            <div style="font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:2px">Phone / Viber</div>
+            <a href="tel:+639361336825" style="font-weight:700;font-size:.95rem;color:var(--ink);text-decoration:none" onmouseover="this.style.color='#00AA58'" onmouseout="this.style.color='var(--ink)'">+63 9361 336 825</a>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px">
+          <div style="width:44px;height:44px;background:linear-gradient(135deg,var(--g1),var(--g3));border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">&#128205;</div>
+          <div>
+            <div style="font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:2px">Location</div>
+            <span style="font-weight:700;font-size:.95rem;color:var(--ink)">Sto. Domingo, Albay, Philippines</span>
+          </div>
+        </div> -->
       </div>
     </div>
-    <div class="cta-right">
-      <a href="mailto:kingbanta@email.com" class="btn-green">Send Me a Message</a>
-      <a href="assets/cv/cvkb.pdf" class="btn-ghost-w" download>Download CV</a>
+
+    <!-- RIGHT form -->
+    <div>
+      <div id="cf_box" style="background:var(--offwhite);border:1.5px solid var(--border);border-radius:24px;padding:40px">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+          <div>
+            <label class="flabel">First Name</label>
+            <input type="text" id="cf_fname" class="finput" placeholder="Juan" required>
+          </div>
+          <div>
+            <label class="flabel">Last Name</label>
+            <input type="text" id="cf_lname" class="finput" placeholder="dela Cruz">
+          </div>
+        </div>
+        <div style="margin-top:14px">
+          <label class="flabel">Your Email</label>
+          <input type="email" id="cf_email" class="finput" placeholder="juan@email.com" required>
+        </div>
+        <div style="margin-top:14px">
+          <label class="flabel">Subject</label>
+          <input type="text" id="cf_subject" class="finput" placeholder="I need a web system...">
+        </div>
+        <div style="margin-top:14px">
+          <label class="flabel">Message</label>
+          <textarea id="cf_message" class="finput" style="resize:vertical;min-height:130px" placeholder="Tell me about your project — what you need, your timeline, and budget..."></textarea>
+        </div>
+        <p id="cf_err" style="display:none;margin-top:10px;font-size:.82rem;color:#c0392b;font-weight:600"></p>
+        <button id="cf_btn" onclick="sendMsg()" style="margin-top:18px;width:100%;background:var(--ink);color:#fff;border:none;padding:15px;border-radius:100px;font-family:'Cabinet Grotesk',sans-serif;font-weight:700;font-size:.95rem;letter-spacing:.04em;cursor:pointer;transition:background .2s,transform .2s,box-shadow .2s" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 10px 28px rgba(0,0,0,.15)'" onmouseout="this.style.transform='none';this.style.boxShadow='none'">
+          Send Message &#x2192;
+        </button>
+      </div>
+
+      <!-- Success -->
+      <div id="cf_ok" style="display:none;background:var(--offwhite);border:1.5px solid rgba(0,200,80,.25);border-radius:24px;padding:56px 40px;text-align:center">
+        <div style="width:68px;height:68px;background:linear-gradient(135deg,var(--g1),var(--g3));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 20px">&#9989;</div>
+        <h3 style="font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:.04em;color:var(--ink);margin-bottom:10px">Mail app opened!</h3>
+        <p style="font-size:.92rem;color:var(--muted);line-height:1.7">Your message is pre-filled in your mail app. Just hit <strong>Send</strong> — it will arrive at <strong>kingbantaclass@gmail.com</strong>.</p>
+        <button onclick="resetCf()" style="margin-top:24px;background:transparent;border:1.5px solid var(--border);padding:10px 28px;border-radius:100px;font-family:'Cabinet Grotesk',sans-serif;font-weight:600;font-size:.88rem;cursor:pointer" onmouseover="this.style.borderColor='#00AA58'" onmouseout="this.style.borderColor='var(--border)'">Send Another &#x2192;</button>
+      </div>
     </div>
+
   </div>
 </section>
 
-<!-- ── FOOTER ── -->
-<footer>
-  <div class="footer-top">
-    <div class="footer-brand">
-      <a href="#" class="nav-logo">KB <span class="logo-dot"></span></a>
-      <p>Web developer from Albay, Philippines. Building systems that work for real people.</p>
-    </div>
-    <div class="footer-links">
-      <div class="footer-col">
-        <div class="footer-col-title">Navigate</div>
-        <ul>
-          <li><a href="#skills">Skills</a></li>
-          <li><a href="#projects">Projects</a></li>
-          <li><a href="#about">About</a></li>
-          <li><a href="#contact">Contact</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <div class="footer-col-title">Contact</div>
-        <ul>
-          <li><a href="mailto:kingbanta@email.com">Email Me</a></li>
-          <li><a href="tel:+639361336825">09361336825</a></li>
-          <li><a href="assets/cv/cvkb.pdf" download>Download CV</a></li>
-        </ul>
-      </div>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <span>© 2025 King Emanuelle B. Banta · All rights reserved.</span>
-    <span>Built with precision ✦</span>
-  </div>
-</footer>
+<script>
+function sendMsg() {
+  var fname   = document.getElementById('cf_fname').value.trim();
+  var lname   = document.getElementById('cf_lname').value.trim();
+  var email   = document.getElementById('cf_email').value.trim();
+  var subject = document.getElementById('cf_subject').value.trim();
+  var message = document.getElementById('cf_message').value.trim();
+  var err     = document.getElementById('cf_err');
+  err.style.display = 'none';
+
+  if (!fname) { err.textContent = 'Please enter your first name.'; err.style.display='block'; return; }
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { err.textContent = 'Please enter a valid email address.'; err.style.display='block'; return; }
+  if (!message) { err.textContent = 'Please write a message.'; err.style.display='block'; return; }
+
+  var sub  = encodeURIComponent((subject || 'Project Inquiry') + ' — from ' + fname + ' ' + lname);
+  var body = encodeURIComponent(
+    'Name: ' + fname + ' ' + lname + '\n' +
+    'Email: ' + email + '\n\n' +
+    'Message:\n' + message
+  );
+
+  window.location.href = 'mailto:kingbantaclass@gmail.com?subject=' + sub + '&body=' + body;
+
+  setTimeout(function() {
+    document.getElementById('cf_box').style.display = 'none';
+    document.getElementById('cf_ok').style.display  = 'block';
+  }, 800);
+}
+
+function resetCf() {
+  ['cf_fname','cf_lname','cf_email','cf_subject','cf_message'].forEach(function(id){ document.getElementById(id).value=''; });
+  document.getElementById('cf_err').style.display = 'none';
+  document.getElementById('cf_ok').style.display  = 'none';
+  document.getElementById('cf_box').style.display = 'block';
+}
+</script>
+
 
 <script>
 // Cursor
