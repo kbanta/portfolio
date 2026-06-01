@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>King Banta — Web Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cabinet+Grotesk:ital,wght@0,300;0,400;0,500;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+:root{
+  --g1:#00FF87;--g2:#0FFD9A;--g3:#9BFFE0;
+  --white:#FFFFFF;--offwhite:#F5F7F2;
+  --ink:#0A0F0A;--ink2:#1A231A;
+  --muted:#6B7C6B;--border:rgba(0,0,0,0.08);
+}
+body{font-family:'Cabinet Grotesk',sans-serif;background:var(--white);color:var(--ink);overflow-x:hidden;cursor:none}
+
+/* CURSOR */
+.cursor,.cursor-ring{position:fixed;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s,opacity .2s}
+.cursor{width:10px;height:10px;background:var(--g1);border-radius:50%;mix-blend-mode:multiply}
+.cursor-ring{width:36px;height:36px;border:1.5px solid var(--g1);border-radius:50%;opacity:.5;z-index:9998;transition:transform .18s ease,width .2s,height .2s,opacity .2s}
+@media(hover:none){.cursor,.cursor-ring{display:none}body{cursor:auto}}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:600;
+  padding:20px 64px;
+  display:flex;justify-content:space-between;align-items:center;
+  transition:background .3s,padding .3s,box-shadow .3s;
+}
+nav.scrolled{
+  background:rgba(255,255,255,.96);
+  backdrop-filter:blur(16px);
+  padding:14px 64px;
+  box-shadow:0 1px 0 var(--border);
+}
+.nav-logo{
+  font-family:'Bebas Neue',sans-serif;font-size:1.65rem;
+  letter-spacing:.06em;color:var(--ink);text-decoration:none;
+  display:flex;align-items:center;gap:8px;flex-shrink:0;
+}
+.logo-dot{width:8px;height:8px;background:var(--g1);border-radius:50%;animation:blink 2s ease-in-out infinite;flex-shrink:0}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+.nav-right{display:flex;align-items:center;gap:8px}
+.nav-links-list{display:flex;gap:32px;list-style:none;align-items:center}
+.nav-links-list a{font-size:.88rem;font-weight:500;color:var(--ink);text-decoration:none;opacity:.55;transition:opacity .2s;white-space:nowrap}
+.nav-links-list a:hover{opacity:1}
+.nav-links-list a.active{opacity:1;color:#00AA58}
+.nav-cta-btn{
+  background:var(--ink)!important;color:#fff!important;
+  padding:10px 24px!important;border-radius:100px!important;
+  opacity:1!important;font-weight:700!important;font-size:.82rem!important;
+  letter-spacing:.04em!important;transition:background .2s,transform .2s!important;
+  white-space:nowrap;
+}
+.nav-cta-btn:hover{background:#111811!important;transform:scale(1.04)}
+
+/* hamburger */
+.hamburger{
+  display:none;flex-direction:column;justify-content:center;gap:5px;
+  width:40px;height:40px;cursor:pointer;background:none;border:none;padding:4px;
+}
+.hamburger span{
+  display:block;height:2px;border-radius:2px;
+  background:var(--ink);transition:transform .3s,opacity .3s,width .3s;width:24px;
+}
+.hamburger span:last-child{width:16px}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);width:24px}
+.hamburger.open span:nth-child(2){opacity:0}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);width:24px}
+
+/* mobile drawer */
+.mobile-menu{
+  display:none;position:fixed;top:0;left:0;right:0;bottom:0;
+  background:var(--white);z-index:590;
+  flex-direction:column;justify-content:center;align-items:center;gap:36px;
+  opacity:0;pointer-events:none;transition:opacity .3s;
+}
+.mobile-menu.open{opacity:1;pointer-events:all}
+.mobile-menu a{
+  font-family:'Bebas Neue',sans-serif;font-size:2.6rem;
+  letter-spacing:.06em;color:var(--ink);text-decoration:none;transition:color .2s;
+}
+.mobile-menu a:hover{color:#00AA58}
+.mobile-menu .mm-cta{
+  background:var(--ink);color:#fff;padding:14px 40px;border-radius:100px;
+  font-family:'Cabinet Grotesk',sans-serif;font-size:1rem;font-weight:700;letter-spacing:.04em;
+}
+@media(max-width:860px){
+  nav{padding:18px 24px}nav.scrolled{padding:14px 24px}
+  .nav-links-list{display:none}.hamburger{display:flex}.mobile-menu{display:flex}
+}
+
+/* ── HERO ── */
+#hero{
+  min-height:100vh;background:var(--offwhite);
+  display:grid;grid-template-columns:1fr 1fr;
+  position:relative;overflow:hidden;
+}
+.hero-left{
+  padding:160px 64px 80px;
+  display:flex;flex-direction:column;justify-content:center;
+  position:relative;z-index:2;
+}
+.hero-right{position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}
+
+.hero-blob{
+  position:absolute;width:700px;height:700px;
+  background:linear-gradient(135deg,var(--g1) 0%,var(--g3) 50%,#60EFCE 100%);
+  border-radius:60% 40% 70% 30%/50% 60% 40% 50%;
+  animation:morphBlob 9s ease-in-out infinite;opacity:.92;right:-100px;
+}
+@keyframes morphBlob{
+  0%,100%{border-radius:60% 40% 70% 30%/50% 60% 40% 50%;transform:rotate(0deg) scale(1)}
+  33%{border-radius:40% 60% 30% 70%/60% 40% 60% 40%;transform:rotate(3deg) scale(1.04)}
+  66%{border-radius:50% 50% 60% 40%/40% 60% 50% 60%;transform:rotate(-3deg) scale(.98)}
+}
+
+/* avatar floating on blob */
+.hero-avatar{
+  position:absolute;z-index:3;
+  width:220px;height:220px;border-radius:50%;
+  border:6px solid rgba(255,255,255,.85);
+  object-fit:cover;
+  box-shadow:0 20px 60px rgba(0,0,0,.15);
+  animation:floatY 5s ease-in-out infinite;
+  background:linear-gradient(135deg,var(--g1),var(--g3));
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+}
+.hero-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.avatar-fallback{
+  font-family:'Bebas Neue',sans-serif;font-size:4rem;
+  letter-spacing:.06em;color:rgba(10,15,10,.6);
+}
+
+/* float cards */
+.float-card{
+  position:absolute;background:rgba(255,255,255,.93);backdrop-filter:blur(10px);
+  border-radius:16px;padding:16px 20px;box-shadow:0 12px 40px rgba(0,0,0,.1);z-index:4;
+}
+.fc1{top:18%;left:5%;animation:floatY 5s ease-in-out infinite}
+.fc2{bottom:22%;right:8%;animation:floatY 6s ease-in-out infinite 1.5s}
+.fc3{top:55%;left:3%;animation:floatY 7s ease-in-out infinite .8s}
+@keyframes floatY{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.fc-label{font-size:.62rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+.fc-value{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:.04em;color:var(--ink);line-height:1}
+.fc-sub{font-size:.68rem;color:var(--muted);margin-top:2px}
+.fc-bar{height:4px;background:linear-gradient(90deg,var(--g1),var(--g3));border-radius:2px;margin-top:8px;width:80%;animation:barFill 3s ease-in-out infinite}
+@keyframes barFill{0%,100%{width:80%}50%{width:100%}}
+
+/* hero text */
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:10px;
+  font-size:.75rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);
+  margin-bottom:28px;opacity:0;animation:fadeUp .7s ease forwards .3s;
+}
+.eyebrow-line{width:32px;height:2px;background:linear-gradient(90deg,var(--g1),var(--g2));border-radius:1px}
+.hero-h1{
+  font-family:'Bebas Neue',sans-serif;font-size:clamp(4rem,8vw,8.5rem);
+  line-height:.92;letter-spacing:.02em;color:var(--ink);
+  opacity:0;animation:fadeUp .7s ease forwards .5s;
+}
+.h1-green{
+  display:block;-webkit-text-fill-color:transparent;
+  background:linear-gradient(135deg,#00CC6A 0%,var(--g1) 50%,var(--g3) 100%);
+  -webkit-background-clip:text;background-clip:text;
+}
+.hero-p{font-size:1rem;color:var(--muted);line-height:1.75;max-width:400px;margin-top:24px;font-weight:400;opacity:0;animation:fadeUp .7s ease forwards .7s}
+.hero-btns{display:flex;gap:14px;margin-top:40px;flex-wrap:wrap;opacity:0;animation:fadeUp .7s ease forwards .9s}
+.btn-dark{
+  background:var(--ink);color:#fff;padding:14px 32px;border-radius:100px;
+  font-weight:700;font-size:.9rem;text-decoration:none;letter-spacing:.02em;
+  display:inline-flex;align-items:center;gap:8px;
+  transition:transform .2s,box-shadow .2s;
+}
+.btn-dark:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(0,0,0,.18)}
+.btn-ghost{
+  background:transparent;color:var(--ink);padding:14px 26px;border-radius:100px;
+  font-weight:600;font-size:.9rem;text-decoration:none;
+  border:1.5px solid rgba(0,0,0,.14);transition:border-color .2s,background .2s;
+}
+.btn-ghost:hover{border-color:var(--ink);background:rgba(0,0,0,.03)}
+.btn-green-pill{
+  background:linear-gradient(135deg,#00CC6A,var(--g1));color:var(--ink);
+  padding:14px 28px;border-radius:100px;font-weight:700;font-size:.9rem;
+  text-decoration:none;transition:transform .2s,box-shadow .2s;
+  display:inline-flex;align-items:center;gap:8px;
+}
+.btn-green-pill:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(0,255,135,.3)}
+
+.hero-stats{
+  display:flex;gap:44px;margin-top:56px;padding-top:40px;
+  border-top:1.5px solid var(--border);flex-wrap:wrap;
+  opacity:0;animation:fadeUp .7s ease forwards 1.1s;
+}
+.hd-num{font-family:'Bebas Neue',sans-serif;font-size:2.6rem;letter-spacing:.02em;color:var(--ink);line-height:1}
+.hd-label{font-size:.72rem;font-weight:700;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-top:4px}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:860px){#hero{grid-template-columns:1fr}.hero-right{display:none}.hero-left{padding:120px 24px 60px}}
+
+/* ── TICKER ── */
+.ticker{background:var(--ink);padding:14px 0;overflow:hidden}
+.ticker-track{display:flex;animation:ticker 20s linear infinite;white-space:nowrap}
+@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.ticker-item{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:.14em;color:rgba(255,255,255,.35);padding:0 28px;flex-shrink:0;display:flex;align-items:center;gap:28px}
+.ticker-sep{color:var(--g1);font-size:1.1rem}
+
+/* ── SECTION COMMONS ── */
+.sec{padding:110px 64px}
+@media(max-width:860px){.sec{padding:80px 24px}}
+.section-tag{
+  font-size:.7rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;
+  color:#00AA58;margin-bottom:18px;display:flex;align-items:center;gap:10px;
+}
+.section-tag::after{content:'';flex:1;height:1.5px;background:linear-gradient(90deg,#00AA58,transparent);max-width:60px}
+.section-h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.4rem,4.5vw,4rem);letter-spacing:.02em;line-height:1;color:var(--ink)}
+
+/* ── SKILLS / STACK ── */
+#skills{background:var(--offwhite)}
+.stack-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:14px;margin-top:48px}
+.stack-chip{
+  background:var(--white);border:1.5px solid var(--border);border-radius:14px;
+  padding:20px 14px;display:flex;flex-direction:column;align-items:center;gap:10px;
+  transition:border-color .25s,transform .25s,box-shadow .25s;text-align:center;
+}
+.stack-chip:hover{border-color:var(--g1);transform:translateY(-5px);box-shadow:0 10px 30px rgba(0,255,135,.1)}
+.stack-chip img{width:30px;height:30px;object-fit:contain;border-radius:4px}
+.sc-name{font-size:.78rem;font-weight:700;color:var(--ink);letter-spacing:.02em}
+.sc-cat{font-size:.62rem;color:var(--muted);font-weight:500;letter-spacing:.06em;text-transform:uppercase}
+
+/* ── PROJECTS ── */
+#projects{background:var(--white)}
+#projects .section-tag::after{background:linear-gradient(90deg,#00AA58,transparent)}
+.proj-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px;margin-top:48px}
+
+/* localhost section */
+.divider-row{
+  display:flex;align-items:center;gap:16px;margin:64px 0 40px;
+}
+.divider-line{flex:1;height:1.5px;background:linear-gradient(90deg,transparent,rgba(0,200,100,.3),transparent)}
+.divider-badge{
+  display:flex;align-items:center;gap:8px;
+  background:rgba(0,200,100,.07);border:1px solid rgba(0,200,100,.22);
+  color:#00AA58;font-size:.68rem;font-weight:700;
+  letter-spacing:.14em;text-transform:uppercase;
+  padding:7px 20px;border-radius:100px;white-space:nowrap;
+}
+.div-dot{width:5px;height:5px;border-radius:50%;background:#00AA58;animation:blink 1.5s infinite}
+
+/* card */
+.pcard{
+  background:var(--offwhite);border:1.5px solid var(--border);border-radius:20px;
+  overflow:hidden;display:flex;flex-direction:column;
+  transition:transform .3s,box-shadow .3s,border-color .3s;
+}
+.pcard:hover{transform:translateY(-7px);box-shadow:0 20px 56px rgba(0,0,0,.09);border-color:rgba(0,255,135,.4)}
+.pcard-thumb{height:180px;overflow:hidden;position:relative}
+.pcard-thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s}
+.pcard:hover .pcard-thumb img{transform:scale(1.05)}
+.pcard-thumb-ph{
+  height:180px;display:flex;align-items:center;justify-content:center;
+  font-size:3rem;position:relative;
+}
+.pcard-thumb-ph::before{
+  content:'';position:absolute;inset:0;
+  background-image:linear-gradient(rgba(0,0,0,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,0,0,.04) 1px,transparent 1px);
+  background-size:24px 24px;
+}
+.pcard-body{padding:24px;flex:1;display:flex;flex-direction:column}
+.pcard-title{font-weight:900;font-size:1rem;color:var(--ink);margin-bottom:8px;letter-spacing:-.01em}
+.pcard-desc{font-size:.84rem;color:var(--muted);line-height:1.65;flex:1}
+.ptags{display:flex;gap:7px;flex-wrap:wrap;margin-top:14px}
+.ptag{
+  font-size:.65rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  padding:4px 10px;border-radius:100px;
+  border:1.5px solid rgba(0,200,80,.3);color:#00AA58;background:rgba(0,200,80,.05);
+}
+.ptag-gray{border-color:var(--border);color:var(--muted);background:transparent}
+.demo-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(0,200,80,.08);border:1px solid rgba(0,200,80,.22);color:#00AA58;
+  font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  padding:4px 10px;border-radius:100px;margin-bottom:8px;width:fit-content;
+}
+.demo-badge-dot{width:5px;height:5px;border-radius:50%;background:#00AA58;animation:blink 1.5s infinite}
+.pcard-links{display:flex;gap:8px;margin-top:14px;padding-top:14px;border-top:1.5px solid var(--border)}
+.pcard-link{
+  font-size:.74rem;font-weight:700;color:var(--muted);text-decoration:none;
+  padding:5px 14px;border:1.5px solid var(--border);border-radius:100px;
+  transition:border-color .2s,color .2s;
+}
+.pcard-link:hover{border-color:var(--g1);color:#00AA58}
+
+/* localhost card variant */
+.pcard-local{border-color:rgba(0,200,80,.12)}
+.pcard-local:hover{border-color:rgba(0,255,135,.45);box-shadow:0 20px 56px rgba(0,0,0,.08),0 0 30px rgba(0,255,135,.06)}
+
+/* ── ABOUT ── */
+#about{background:var(--offwhite)}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+@media(max-width:860px){.about-grid{grid-template-columns:1fr;gap:40px}}
+.about-text p{color:var(--muted);line-height:1.8;font-size:1rem;margin-top:20px}
+.about-cards{display:flex;flex-direction:column;gap:14px}
+.acard{
+  background:var(--white);border-radius:16px;padding:24px;
+  border:1.5px solid var(--border);display:flex;gap:14px;align-items:flex-start;
+  transition:border-color .25s,transform .25s;
+}
+.acard:hover{border-color:var(--g1);transform:translateX(6px)}
+.acard-icon{
+  width:42px;height:42px;background:linear-gradient(135deg,var(--g1),var(--g3));
+  border-radius:12px;display:flex;align-items:center;justify-content:center;
+  font-size:18px;flex-shrink:0;
+}
+.acard-title{font-weight:800;font-size:.92rem;color:var(--ink);margin-bottom:4px}
+.acard-desc{font-size:.8rem;color:var(--muted);line-height:1.6}
+
+/* ── CONTACT (CTA) ── */
+#contact{background:var(--white)}
+.cta-inner{
+  background:var(--ink);border-radius:28px;padding:72px 72px;
+  display:grid;grid-template-columns:1fr auto;gap:56px;align-items:center;
+  position:relative;overflow:hidden;
+}
+@media(max-width:860px){.cta-inner{grid-template-columns:1fr;padding:44px 28px;gap:32px}}
+.cta-blob{position:absolute;right:-80px;top:-80px;width:400px;height:400px;background:radial-gradient(circle,rgba(0,255,135,.13) 0%,transparent 65%);pointer-events:none}
+.cta-tag{font-size:.7rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--g1);margin-bottom:14px}
+.cta-h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.6rem,5vw,4.2rem);letter-spacing:.02em;line-height:1;color:#fff}
+.cta-p{font-size:.95rem;color:rgba(255,255,255,.4);line-height:1.7;margin-top:16px;max-width:440px}
+.cta-right{display:flex;flex-direction:column;gap:12px;min-width:200px}
+.btn-green{
+  background:linear-gradient(135deg,#00CC6A,var(--g1));color:var(--ink);
+  padding:15px 34px;border-radius:100px;font-weight:800;font-size:.9rem;
+  text-decoration:none;text-align:center;letter-spacing:.02em;
+  transition:transform .2s,box-shadow .2s;box-shadow:0 8px 32px rgba(0,255,135,.25);
+}
+.btn-green:hover{transform:translateY(-3px);box-shadow:0 14px 36px rgba(0,255,135,.4)}
+.btn-ghost-w{
+  background:transparent;color:rgba(255,255,255,.6);padding:13px 26px;
+  border-radius:100px;font-weight:600;font-size:.88rem;text-decoration:none;
+  text-align:center;border:1.5px solid rgba(255,255,255,.1);transition:border-color .2s,color .2s;
+}
+.btn-ghost-w:hover{border-color:rgba(255,255,255,.3);color:#fff}
+.cta-details{margin-top:20px;display:flex;flex-direction:column;gap:8px}
+.cta-detail{display:flex;align-items:center;gap:10px;font-size:.82rem;color:rgba(255,255,255,.35)}
+.cta-detail a{color:rgba(255,255,255,.5);text-decoration:none;transition:color .2s}
+.cta-detail a:hover{color:var(--g1)}
+
+/* ── FOOTER ── */
+footer{background:var(--ink);padding:48px 64px 28px;border-top:1px solid rgba(255,255,255,.06)}
+@media(max-width:860px){footer{padding:40px 24px 24px}}
+.footer-top{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:32px;padding-bottom:36px;border-bottom:1px solid rgba(255,255,255,.07)}
+.footer-brand .nav-logo{color:#fff;margin-bottom:12px;display:inline-flex}
+.footer-brand p{font-size:.84rem;color:rgba(255,255,255,.32);line-height:1.7;max-width:240px}
+.footer-links{display:flex;gap:48px;flex-wrap:wrap}
+.footer-col-title{font-family:'Bebas Neue',sans-serif;font-size:.88rem;letter-spacing:.12em;color:rgba(255,255,255,.35);margin-bottom:16px}
+.footer-col ul{list-style:none}
+.footer-col ul li{margin-bottom:10px}
+.footer-col ul li a{font-size:.84rem;color:rgba(255,255,255,.36);text-decoration:none;transition:color .2s}
+.footer-col ul li a:hover{color:var(--g1)}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:24px;flex-wrap:wrap;gap:10px}
+.footer-bottom span{font-size:.76rem;color:rgba(255,255,255,.22)}
+
+/* ── REVEAL ── */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .65s ease,transform .65s ease}
+.reveal.up{opacity:1;transform:none}
+.d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}.d4{transition-delay:.32s}
+
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:#fff}
+::-webkit-scrollbar-thumb{background:var(--g1);border-radius:3px}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- ── NAV ── -->
+<nav id="nav">
+  <a href="#" class="nav-logo">KB <span class="logo-dot"></span></a>
+  <div class="nav-right">
+    <ul class="nav-links-list">
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact" class="nav-cta-btn">Hire Me</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#skills" class="mm-link">Skills</a>
+  <a href="#projects" class="mm-link">Projects</a>
+  <a href="#about" class="mm-link">About</a>
+  <a href="#contact" class="mm-cta mm-link">Hire Me</a>
+</div>
+
+<!-- ── HERO ── -->
+<section id="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow"><span class="eyebrow-line"></span>Web Developer · Albay, Philippines</div>
+    <h1 class="hero-h1">KING<br><span class="h1-green">BANTA</span></h1>
+    <p class="hero-p">Building dynamic web systems and user-friendly applications — from ERP platforms to CRM tools — that make a real difference for real businesses.</p>
+    <div class="hero-btns">
+      <a href="#projects" class="btn-dark">View Projects →</a>
+      <a href="assets/cv/cvkb.pdf" class="btn-green-pill" download>Download CV ↓</a>
+    </div>
+    <div class="hero-stats">
+      <div><div class="hd-num">9+</div><div class="hd-label">Projects Shipped</div></div>
+      <div><div class="hd-num">4+</div><div class="hd-label">Live Clients</div></div>
+      <div><div class="hd-num">Full</div><div class="hd-label">Stack Dev</div></div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="hero-blob"></div>
+    <!-- Avatar -->
+    <div class="hero-avatar" id="heroAvatar">
+      <img src="assets/img/kb1.png" alt="King Banta"
+        onerror="this.style.display='none';document.getElementById('avatarFallback').style.display='flex'">
+      <div class="avatar-fallback" id="avatarFallback" style="display:none;width:100%;height:100%;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:4rem;letter-spacing:.06em;color:rgba(10,15,10,.55)">KB</div>
+    </div>
+    <!-- Float cards -->
+    <div class="float-card fc1">
+      <div class="fc-label">Projects Done</div>
+      <div class="fc-value">9+</div>
+      <div class="fc-bar"></div>
+    </div>
+    <div class="float-card fc2">
+      <div class="fc-label">Main Stack</div>
+      <div class="fc-value">Laravel</div>
+      <div class="fc-sub">PHP · MySQL · Blade</div>
+    </div>
+    <div class="float-card fc3">
+      <div class="fc-label">Location</div>
+      <div class="fc-value" style="font-size:1rem;line-height:1.3;font-family:'Cabinet Grotesk',sans-serif;font-weight:800">Albay, PH</div>
+      <div class="fc-sub">Open to remote work</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── TICKER ── -->
+<div class="ticker">
+  <div class="ticker-track">
+    <span class="ticker-item">Laravel <span class="ticker-sep">✦</span></span>
+    <span class="ticker-item">CodeIgniter <span class="ticker-sep">✦</span></span>
+    <span class="ticker-item">PHP <span class="ticker-sep">✦</span></span>
+    <span class="ticker-item">MySQL <span class="ticker-sep">✦</span></span>
+    <span class="ticker-item">JavaScript <span class="ticker-sep">✦</span></span>
+    <span class="ticker-item">jQuery <span class="ticker-sep">✦</span></span>
+    <span class="ticker-item">Bootstrap <span class="ticker-sep">✦</span></span>
+    <span class="ticker-item">Tailwind CSS <span class="ticker-sep">✦</span></span>
+    <span class="ticker-item">WordPress <span class="ticker-sep">✦</span></span>
+    <span class="ticker-item">Elementor <span class="ticker-sep">✦</span></span>
+    <span class="ticker-item">Git <span class="ticker-sep">✦</span></span>
+    <span class="ticker-item">AJAX <span class="ticker-sep">✦</span></span>
+    <!-- dupe -->
+    <span class="ticker-item">Laravel <span class="ticker-sep">✦</span></span>
+    <span class="ticker-item">CodeIgniter <span class="ticker-sep">✦</span></span>
+    <span class="ticker-item">PHP <span class="ticker-sep">✦</span></span>
+    <span class="ticker-item">MySQL <span class="ticker-sep">✦</span></span>
+    <span class="ticker-item">JavaScript <span class="ticker-sep">✦</span></span>
+    <span class="ticker-item">jQuery <span class="ticker-sep">✦</span></span>
+    <span class="ticker-item">Bootstrap <span class="ticker-sep">✦</span></span>
+    <span class="ticker-item">Tailwind CSS <span class="ticker-sep">✦</span></span>
+    <span class="ticker-item">WordPress <span class="ticker-sep">✦</span></span>
+    <span class="ticker-item">Elementor <span class="ticker-sep">✦</span></span>
+    <span class="ticker-item">Git <span class="ticker-sep">✦</span></span>
+    <span class="ticker-item">AJAX <span class="ticker-sep">✦</span></span>
+  </div>
+</div>
+
+<!-- ── SKILLS ── -->
+<section id="skills" class="sec" style="background:var(--offwhite)">
+  <div class="reveal">
+    <div class="section-tag">What I Use</div>
+    <h2 class="section-h2">Tech Stack</h2>
+  </div>
+  <div class="stack-grid reveal d1">
+    <div class="stack-chip">
+      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/laravel/laravel-original.svg" alt="Laravel">
+      <div class="sc-name">Laravel</div><div class="sc-cat">Backend</div>
+    </div>
+    <div class="stack-chip">
+      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/codeigniter/codeigniter-plain.svg" alt="CodeIgniter">
+      <div class="sc-name">CodeIgniter</div><div class="sc-cat">Backend</div>
+    </div>
+    <div class="stack-chip">
+      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg" alt="PHP">
+      <div class="sc-name">PHP</div><div class="sc-cat">Backend</div>
+    </div>
+    <div class="stack-chip">
+      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" alt="MySQL">
+      <div class="sc-name">MySQL</div><div class="sc-cat">Database</div>
+    </div>
+    <div class="stack-chip">
+      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JS">
+      <div class="sc-name">JavaScript</div><div class="sc-cat">Frontend</div>
+    </div>
+    <div class="stack-chip">
+      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/jquery/jquery-original.svg" alt="jQuery">
+      <div class="sc-name">jQuery</div><div class="sc-cat">Frontend</div>
+    </div>
+    <div class="stack-chip">
+      <img src="https://logowik.com/content/uploads/images/ajax2010.jpg" alt="Ajax" onerror="this.src='https://www.svgrepo.com/show/369457/ajax.svg'">
+      <div class="sc-name">AJAX</div><div class="sc-cat">Frontend</div>
+    </div>
+    <div class="stack-chip">
+      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-original.svg" alt="Bootstrap">
+      <div class="sc-name">Bootstrap</div><div class="sc-cat">CSS</div>
+    </div>
+    <div class="stack-chip">
+      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg" alt="Tailwind">
+      <div class="sc-name">Tailwind</div><div class="sc-cat">CSS</div>
+    </div>
+    <div class="stack-chip">
+      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML">
+      <div class="sc-name">HTML / CSS</div><div class="sc-cat">Web</div>
+    </div>
+    <div class="stack-chip">
+      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/wordpress/wordpress-original.svg" alt="WordPress">
+      <div class="sc-name">WordPress</div><div class="sc-cat">CMS</div>
+    </div>
+    <div class="stack-chip">
+      <img src="https://images.seeklogo.com/logo-png/65/2/elementor-logo-png_seeklogo-653478.png" alt="Elementor" style="border-radius:0">
+      <div class="sc-name">Elementor</div><div class="sc-cat">Page Builder</div>
+    </div>
+    <div class="stack-chip">
+      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" alt="Git">
+      <div class="sc-name">Git</div><div class="sc-cat">Version Control</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PROJECTS ── -->
+<section id="projects" class="sec" style="background:var(--white)">
+  <div class="reveal">
+    <div class="section-tag">My Work</div>
+    <h2 class="section-h2">Projects</h2>
+  </div>
+
+  <!-- LIVE PROJECTS -->
+  <div class="proj-grid">
+
+    <div class="pcard reveal">
+      <div class="pcard-thumb">
+        <img src="assets/img/portfolio/acme_port.png" alt="Alliance Care Medical"
+          onerror="this.parentElement.innerHTML='<div class=\'pcard-thumb-ph\' style=\'background:linear-gradient(135deg,#e8fdf2,#d0fae6);\'>🏥</div>'">
+      </div>
+      <div class="pcard-body">
+        <div class="pcard-title">Alliance Care Medical Equipment</div>
+        <div class="pcard-desc">A WordPress e-commerce website for medical equipment rentals and management, with custom booking and product catalog functionality.</div>
+        <div class="ptags">
+          <span class="ptag">WordPress</span>
+          <span class="ptag">Elementor</span>
+          <span class="ptag-gray ptag">AJAX</span>
+          <span class="ptag-gray ptag">jQuery</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="pcard reveal d1">
+      <div class="pcard-thumb">
+        <img src="assets/img/portfolio/acmedel.png" alt="Alliance Delivery App"
+          onerror="this.parentElement.innerHTML='<div class=\'pcard-thumb-ph\' style=\'background:linear-gradient(135deg,#f0fff8,#d0fae6);\'>🚚</div>'">
+      </div>
+      <div class="pcard-body">
+        <div class="pcard-title">Alliance Delivery App</div>
+        <div class="pcard-desc">Custom delivery application for handling DME rental pickup and delivery logistics, with driver tracking and admin dispatch control.</div>
+        <div class="ptags">
+          <span class="ptag">CodeIgniter</span>
+          <span class="ptag-gray ptag">MDB</span>
+          <span class="ptag-gray ptag">AJAX</span>
+          <span class="ptag-gray ptag">jQuery</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="pcard reveal d2">
+      <div class="pcard-thumb">
+        <img src="assets/img/portfolio/bicoltfoe.png" alt="Bicol TFOE"
+          onerror="this.parentElement.innerHTML='<div class=\'pcard-thumb-ph\' style=\'background:linear-gradient(135deg,#f0fff8,#ccfce7);\'>📊</div>'">
+      </div>
+      <div class="pcard-body">
+        <div class="pcard-title">Bicol TFOE</div>
+        <div class="pcard-desc">A CRM system for streamlined client management, engagement tracking, and activity reporting across regional operations.</div>
+        <div class="ptags">
+          <span class="ptag">CodeIgniter</span>
+          <span class="ptag-gray ptag">MDB</span>
+          <span class="ptag-gray ptag">AJAX</span>
+          <span class="ptag-gray ptag">jQuery</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="pcard reveal d3">
+      <div class="pcard-thumb">
+        <img src="assets/img/portfolio/acb.png" alt="ASEAN Centre for Biodiversity"
+          onerror="this.parentElement.innerHTML='<div class=\'pcard-thumb-ph\' style=\'background:linear-gradient(135deg,#f0fff8,#d0fae6);\'>🌿</div>'">
+      </div>
+      <div class="pcard-body">
+        <div class="pcard-title">ASEAN Centre for Biodiversity</div>
+        <div class="pcard-desc">ERP system integrating planning, purchasing, inventory, finance, and human resources for a multi-department biodiversity organization.</div>
+        <div class="ptags">
+          <span class="ptag">CodeIgniter</span>
+          <span class="ptag-gray ptag">MDB</span>
+          <span class="ptag-gray ptag">AJAX</span>
+          <span class="ptag-gray ptag">jQuery</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="pcard reveal d4">
+      <div class="pcard-thumb">
+        <img src="assets/img/portfolio/forbes1.png" alt="FC Online Purchase Tracking"
+          onerror="this.parentElement.innerHTML='<div class=\'pcard-thumb-ph\' style=\'background:linear-gradient(135deg,#f0fff8,#d0fae6);\'>📦</div>'">
+      </div>
+      <div class="pcard-body">
+        <div class="pcard-title">FC Online Purchase Tracking System</div>
+        <div class="pcard-desc">Enables users to track order status in real time from placement to delivery. Built on Laravel 8 with Blade templating and live status updates via AJAX.</div>
+        <div class="ptags">
+          <span class="ptag">Laravel 8</span>
+          <span class="ptag-gray ptag">Blade</span>
+          <span class="ptag-gray ptag">AJAX</span>
+          <span class="ptag-gray ptag">jQuery</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- LOCALHOST DIVIDER -->
+  <div class="divider-row reveal">
+    <div class="divider-line"></div>
+    <div class="divider-badge"><span class="div-dot"></span>Localhost &amp; Demo Projects<span class="div-dot"></span></div>
+    <div class="divider-line"></div>
+  </div>
+
+  <div class="proj-grid">
+
+    <div class="pcard pcard-local reveal">
+      <div class="pcard-thumb-ph" style="background:linear-gradient(135deg,#e8fdf2,#d0fae6)">🚑</div>
+      <div class="pcard-body">
+        <div class="demo-badge"><span class="demo-badge-dot"></span>Ready for Demo</div>
+        <div class="pcard-title">Non-Emergency Transport Service</div>
+        <div class="pcard-desc">Full-featured transport management system with Client, Admin, and Driver portals for scheduling non-emergency medical transport.</div>
+        <div class="ptags">
+          <span class="ptag">Laravel 12</span>
+          <span class="ptag-gray ptag">Bootstrap</span>
+          <span class="ptag-gray ptag">Blade</span>
+          <span class="ptag-gray ptag">MySQL</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="pcard pcard-local reveal d1">
+      <div class="pcard-thumb-ph" style="background:linear-gradient(135deg,#f0fff8,#ccfce7)">🏠</div>
+      <div class="pcard-body">
+        <div class="demo-badge"><span class="demo-badge-dot"></span>Ready for Demo</div>
+        <div class="pcard-title">Bedspace Management System</div>
+        <div class="pcard-desc">Admin-facing system for managing bedspace units, tenant records, monthly billing, and occupancy tracking in dormitory settings.</div>
+        <div class="ptags">
+          <span class="ptag">Laravel 12</span>
+          <span class="ptag-gray ptag">Bootstrap</span>
+          <span class="ptag-gray ptag">Blade</span>
+          <span class="ptag-gray ptag">MySQL</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="pcard pcard-local reveal d2">
+      <div class="pcard-thumb-ph" style="background:linear-gradient(135deg,#f0fff8,#d0fae6)">🤝</div>
+      <div class="pcard-body">
+        <div class="demo-badge"><span class="demo-badge-dot"></span>Ready for Demo</div>
+        <div class="pcard-title">Assisted Living Website</div>
+        <div class="pcard-desc">Client-facing website for an assisted living facility showcasing care programs and enabling family inquiry submissions online.</div>
+        <div class="ptags">
+          <span class="ptag">Laravel 12</span>
+          <span class="ptag-gray ptag">Bootstrap</span>
+          <span class="ptag-gray ptag">Blade</span>
+          <span class="ptag-gray ptag">MySQL</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="pcard pcard-local reveal d3">
+      <div class="pcard-thumb-ph" style="background:linear-gradient(135deg,#f0fff8,#d0fae6)">🍽️</div>
+      <div class="pcard-body">
+        <div class="demo-badge"><span class="demo-badge-dot"></span>Ready for Demo</div>
+        <div class="pcard-title">Restaurant Management System</div>
+        <div class="pcard-desc">Comprehensive platform covering menu management, table reservations, order processing, and detailed daily sales reporting.</div>
+        <div class="ptags">
+          <span class="ptag">Laravel 12</span>
+          <span class="ptag-gray ptag">Bootstrap</span>
+          <span class="ptag-gray ptag">Blade</span>
+          <span class="ptag-gray ptag">MySQL</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── ABOUT ── -->
+<section id="about" class="sec" style="background:var(--offwhite)">
+  <div class="about-grid">
+    <div class="reveal">
+      <div class="section-tag">Who I Am</div>
+      <h2 class="section-h2">About Me</h2>
+      <p class="about-text" style="margin-top:0">
+        <p style="color:var(--muted);line-height:1.8;font-size:1rem;margin-top:20px">I'm a web developer based in Sto. Domingo, Albay, Philippines. I graduated during the pandemic and dove straight into real-world projects — building everything from ERP and CRM systems to delivery apps and e-commerce stores.</p>
+        <p style="color:var(--muted);line-height:1.8;font-size:1rem;margin-top:14px">My main stack is PHP (Laravel & CodeIgniter) with MySQL on the backend, and I'm comfortable across the frontend with Bootstrap, Tailwind, JavaScript, and jQuery. I also build and maintain WordPress sites using Elementor.</p>
+        <p style="color:var(--muted);line-height:1.8;font-size:1rem;margin-top:14px">I'm always looking for opportunities to build systems that solve real problems and keep growing as a developer.</p>
+      </p>
+      <div style="margin-top:32px;display:flex;gap:14px;flex-wrap:wrap">
+        <a href="assets/cv/cvkb.pdf" class="btn-dark" download>Download CV ↓</a>
+        <a href="#contact" class="btn-ghost">Get in Touch</a>
+      </div>
+    </div>
+    <div class="about-cards reveal d2">
+      <div class="acard">
+        <div class="acard-icon">💻</div>
+        <div>
+          <div class="acard-title">Full-Stack Web Development</div>
+          <div class="acard-desc">Laravel, CodeIgniter, PHP, MySQL — backend systems built for reliability and scale.</div>
+        </div>
+      </div>
+      <div class="acard">
+        <div class="acard-icon">🎨</div>
+        <div>
+          <div class="acard-title">Frontend & UI</div>
+          <div class="acard-desc">Bootstrap, Tailwind, JavaScript, jQuery — clean, responsive interfaces that work on every screen.</div>
+        </div>
+      </div>
+      <div class="acard">
+        <div class="acard-icon">🌐</div>
+        <div>
+          <div class="acard-title">WordPress & CMS</div>
+          <div class="acard-desc">Custom WordPress builds with Elementor — easy for clients to manage, great for SEO.</div>
+        </div>
+      </div>
+      <div class="acard">
+        <div class="acard-icon">🚀</div>
+        <div>
+          <div class="acard-title">Open to Remote Work</div>
+          <div class="acard-desc">Available for freelance projects and remote full-time roles. Fast communication, honest timelines.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CONTACT CTA ── -->
+<section id="contact" class="sec" style="background:var(--white)">
+  <div class="cta-inner reveal">
+    <div class="cta-blob"></div>
+    <div>
+      <div class="cta-tag">✦ Let's Work Together</div>
+      <h2 class="cta-h2">Got a project?<br>Let's build it.</h2>
+      <p class="cta-p">Whether you need a custom web system, a business website, or help with an existing project — I'm available and ready to help.</p>
+      <div class="cta-details">
+        <div class="cta-detail">📧 <a href="mailto:kingbanta@email.com">kingbanta@email.com</a></div>
+        <div class="cta-detail">📱 <a href="tel:+639361336825">+63 9361 336 825</a></div>
+        <div class="cta-detail">📍 <span style="color:rgba(255,255,255,.35)">P2, San Andres, Sto. Domingo, Albay</span></div>
+      </div>
+    </div>
+    <div class="cta-right">
+      <a href="mailto:kingbanta@email.com" class="btn-green">Send Me a Message</a>
+      <a href="assets/cv/cvkb.pdf" class="btn-ghost-w" download>Download CV</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <a href="#" class="nav-logo">KB <span class="logo-dot"></span></a>
+      <p>Web developer from Albay, Philippines. Building systems that work for real people.</p>
+    </div>
+    <div class="footer-links">
+      <div class="footer-col">
+        <div class="footer-col-title">Navigate</div>
+        <ul>
+          <li><a href="#skills">Skills</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Contact</div>
+        <ul>
+          <li><a href="mailto:kingbanta@email.com">Email Me</a></li>
+          <li><a href="tel:+639361336825">09361336825</a></li>
+          <li><a href="assets/cv/cvkb.pdf" download>Download CV</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 King Emanuelle B. Banta · All rights reserved.</span>
+    <span>Built with precision ✦</span>
+  </div>
+</footer>
+
+<script>
+// Cursor
+const cur=document.getElementById('cursor'),ring=document.getElementById('cursorRing');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
+(function anim(){
+  cur.style.left=mx+'px';cur.style.top=my+'px';
+  rx+=(mx-rx)*.12;ry+=(my-ry)*.12;
+  ring.style.left=rx+'px';ring.style.top=ry+'px';
+  requestAnimationFrame(anim);
+})();
+document.querySelectorAll('a,button,input,textarea').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cur.style.width='18px';cur.style.height='18px';ring.style.width='52px';ring.style.height='52px';ring.style.opacity='.8'});
+  el.addEventListener('mouseleave',()=>{cur.style.width='10px';cur.style.height='10px';ring.style.width='36px';ring.style.height='36px';ring.style.opacity='.5'});
+});
+
+// Nav scroll
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',window.scrollY>40));
+
+// Hamburger
+const hb=document.getElementById('hamburger'),mm=document.getElementById('mobileMenu');
+hb.addEventListener('click',()=>{
+  hb.classList.toggle('open');mm.classList.toggle('open');
+  document.body.style.overflow=mm.classList.contains('open')?'hidden':'';
+});
+document.querySelectorAll('.mm-link').forEach(l=>{
+  l.addEventListener('click',()=>{hb.classList.remove('open');mm.classList.remove('open');document.body.style.overflow=''});
+});
+
+// Scroll reveal
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('up')});
+},{threshold:.08,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+// Nav active highlight
+const sections=document.querySelectorAll('section[id]');
+const navAs=document.querySelectorAll('.nav-links-list a');
+window.addEventListener('scroll',()=>{
+  let cur='';
+  sections.forEach(s=>{if(window.scrollY>=s.offsetTop-130)cur=s.id});
+  navAs.forEach(a=>{
+    const isActive=a.getAttribute('href')==='#'+cur;
+    a.style.opacity=isActive?'1':'';
+    a.style.color=isActive?'#00AA58':'';
+  });
+});
+</script>
+</body>
+</html>
