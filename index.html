@@ -387,6 +387,81 @@ footer{background:var(--ink);padding:48px 64px 28px;border-top:1px solid rgba(25
 ::-webkit-scrollbar{width:5px}
 ::-webkit-scrollbar-track{background:#fff}
 ::-webkit-scrollbar-thumb{background:var(--g1);border-radius:3px}
+#ai-btn{
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  width:60px;
+  height:60px;
+  border-radius:50%;
+  background:#00FF87;
+  border:none;
+  font-size:24px;
+  cursor:pointer;
+}
+
+#chatbox{
+  position:fixed;
+  bottom:90px;
+  right:20px;
+  width:350px;
+  height:500px;
+  background:#fff;
+  border-radius:15px;
+  box-shadow:0 10px 30px rgba(0,0,0,.2);
+  display:none;
+  flex-direction:column;
+  overflow:hidden;
+}
+
+#header{
+  background:#111;
+  color:#fff;
+  padding:12px;
+  display:flex;
+  justify-content:space-between;
+}
+
+#messages{
+  flex:1;
+  padding:10px;
+  overflow:auto;
+}
+
+.user{
+  text-align:right;
+  margin:5px;
+  background:#111;
+  color:#fff;
+  padding:8px;
+  border-radius:10px;
+}
+
+.bot{
+  text-align:left;
+  margin:5px;
+  background:#e9ffe9;
+  padding:8px;
+  border-radius:10px;
+}
+
+#inputBox{
+  display:flex;
+  border-top:1px solid #ddd;
+}
+
+#input{
+  flex:1;
+  padding:10px;
+  border:none;
+}
+
+#send{
+  background:#00FF87;
+  border:none;
+  padding:10px 15px;
+  cursor:pointer;
+}
 </style>
 </head>
 <body>
@@ -873,6 +948,22 @@ footer{background:var(--ink);padding:48px 64px 28px;border-top:1px solid rgba(25
   </div>
 </section>
 
+<button id="ai-btn">🤖</button>
+
+<div id="chatbox">
+  <div id="header">
+    <span>AI Receptionist</span>
+    <span onclick="toggleChat()" style="cursor:pointer">✕</span>
+  </div>
+
+  <div id="messages"></div>
+
+  <div id="inputBox">
+    <input id="input" placeholder="Ask about King Banta..." />
+    <button id="send">Send</button>
+  </div>
+</div>
+
 <script>
 function sendMsg() {
   var fname   = document.getElementById('cf_fname').value.trim();
@@ -958,6 +1049,101 @@ window.addEventListener('scroll',()=>{
     a.style.opacity=isActive?'1':'';
     a.style.color=isActive?'#00AA58':'';
   });
+});
+</script>
+  <script>
+const API_KEY = "YOUR_GEMINI_API_KEY";
+
+const btn = document.getElementById("ai-btn");
+const chatbox = document.getElementById("chatbox");
+const send = document.getElementById("send");
+const input = document.getElementById("input");
+const messages = document.getElementById("messages");
+
+btn.onclick = () => {
+  chatbox.style.display = "flex";
+  if(messages.innerHTML === ""){
+    bot("Hi 👋 I'm King's AI Receptionist. Ask me anything about his services.");
+  }
+};
+
+function toggleChat(){
+  chatbox.style.display = "none";
+}
+
+function addUser(text){
+  messages.innerHTML += `<div class="user">${text}</div>`;
+  messages.scrollTop = messages.scrollHeight;
+}
+
+function bot(text){
+  messages.innerHTML += `<div class="bot">${text}</div>`;
+  messages.scrollTop = messages.scrollHeight;
+}
+
+async function sendMessage(){
+
+  const text = input.value.trim();
+  if(!text) return;
+
+  addUser(text);
+  input.value = "";
+
+  bot("Thinking...");
+
+  const prompt = `
+You are King's AI Receptionist.
+
+Answer only about:
+- King Banta (Web Developer)
+- Laravel, PHP, CodeIgniter, MySQL
+- CRM, ERP, Web Systems
+- Portfolio projects
+Be professional and concise.
+
+User: ${text}
+`;
+
+  try {
+
+    const res = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`,
+      {
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json"
+        },
+        body:JSON.stringify({
+          contents:[
+            {
+              parts:[{ text: prompt }]
+            }
+          ]
+        })
+      }
+    );
+
+    const data = await res.json();
+
+    document.querySelector(".bot:last-child").remove();
+
+    const reply =
+      data.candidates?.[0]?.content?.parts?.[0]?.text ||
+      "No response from AI";
+
+    bot(reply);
+
+  } catch(err){
+    document.querySelector(".bot:last-child").remove();
+    bot("Error connecting to AI");
+    console.log(err);
+  }
+}
+
+send.onclick = sendMessage;
+
+input.addEventListener("keypress", e=>{
+  if(e.key === "Enter") sendMessage();
 });
 </script>
 </body>
